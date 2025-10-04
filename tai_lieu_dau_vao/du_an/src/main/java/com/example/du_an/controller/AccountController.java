@@ -12,10 +12,11 @@ import java.io.IOException;
 public class AccountController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("views/dashboard.jsp").forward(req, resp);
+        //if(role == ""ADMIN)
+        req.getRequestDispatcher("views/customer/list.jsp").forward(req, resp);
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("views/dashboard.jsp?role=admin").forward(req, resp);
+        req.getRequestDispatcher("customer?action=list").forward(req, resp);
     }
 }

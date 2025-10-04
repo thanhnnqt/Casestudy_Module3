@@ -6,10 +6,6 @@ import com.example.du_an.repository.ICustomerRepository;
 
 import java.util.List;
 
-public class CustomerService implements ICustomerService{
-    ICustomerRepository customerRepository = new CustomerRepository();
-    @Override
-    public List<Customer> findAll() {
-        return customerRepository.findAll();
-    }
+public class CustomerService {
+
 }
