@@ -15,28 +15,28 @@ CREATE TABLE `account`
 -- Bảng nhân viên
 CREATE TABLE employee
 (
-    employee_id  INT AUTO_INCREMENT PRIMARY KEY,
-    account_id   INT                NOT NULL,
-    `full_name`  VARCHAR(100)       NOT NULL,
-    dob          DATE,
-    phone_number VARCHAR(15),
-    salary       DECIMAL(12, 2),
-    email        VARCHAR(50),
-    cccd         VARCHAR(20) UNIQUE NOT NULL,
+    employee_id    INT AUTO_INCREMENT PRIMARY KEY,
+    account_id     INT                NOT NULL,
+    `full_name`    VARCHAR(100)       NOT NULL,
+    dob            DATE,
+    phone_number   VARCHAR(15),
+    salary         DECIMAL(12, 2),
+    email          VARCHAR(50),
+    citizen_number VARCHAR(20) UNIQUE NOT NULL,
     FOREIGN KEY (account_id) REFERENCES `account` (account_id)
 );
 
 -- Bảng khách hàng (có CCCD)
 CREATE TABLE customer
 (
-    customer_id  INT AUTO_INCREMENT PRIMARY KEY,
-    account_id   INT                NOT NULL,
-    full_name    VARCHAR(100)       NOT NULL,
-    cccd         VARCHAR(20) UNIQUE NOT NULL,
-    phone_number VARCHAR(15),
-    address      VARCHAR(255),
-    email        VARCHAR(50),
-    dob          DATE,
+    customer_id    INT AUTO_INCREMENT PRIMARY KEY,
+    account_id     INT                NOT NULL,
+    full_name      VARCHAR(100)       NOT NULL,
+    citizen_number VARCHAR(20) UNIQUE NOT NULL,
+    phone_number   VARCHAR(15),
+    address        VARCHAR(255),
+    email          VARCHAR(50),
+    dob            DATE,
     FOREIGN KEY (account_id) REFERENCES account (account_id)
 );
 
@@ -82,9 +82,6 @@ CREATE TABLE liquidation_contract
     FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
 );
 
-USE
-case_study;
-
 -- ==========================
 -- 1. Account (20 tài khoản)
 -- ==========================
@@ -108,12 +105,13 @@ VALUES ('user1', 'pass1', 'USER'),
        ('staff2', 'passstaff2', 'STAFF'),
        ('staff3', 'passstaff3', 'STAFF'),
        ('staff4', 'passstaff4', 'STAFF'),
-       ('staff5', 'passstaff5', 'STAFF');
+       ('staff5', 'passstaff5', 'STAFF'),
+       ('staff6', 'passadmin6', 'ADMIN');
 
 -- ==========================
 -- 2. Employee (5 nhân viên)
 -- ==========================
-INSERT INTO employee (account_id, full_name, dob, phone_number, salary, email, cccd)
+INSERT INTO employee (account_id, full_name, dob, phone_number, salary, email, citizen_number)
 VALUES (16, 'Nguyen Van A', '1995-05-10', '0901111111', 12000000, 'nva@company.com', '012345678901'),
        (17, 'Tran Thi B', '1998-07-22', '0902222222', 10000000, 'ttb@company.com', '012345678902'),
        (18, 'Le Van C', '1990-01-15', '0903333333', 15000000, 'lvc@company.com', '012345678903'),
@@ -123,7 +121,7 @@ VALUES (16, 'Nguyen Van A', '1995-05-10', '0901111111', 12000000, 'nva@company.c
 -- ==========================
 -- 3. Customer (15 khách hàng)
 -- ==========================
-INSERT INTO customer (account_id, full_name, cccd, phone_number, address, email, dob)
+INSERT INTO customer (account_id, full_name, citizen_number, phone_number, address, email, dob)
 VALUES (1, 'Pham Van F', '111111111111', '0911111111', 'Ha Noi', 'c1@mail.com', '2000-03-12'),
        (2, 'Le Thi G', '222222222222', '0922222222', 'Hai Phong', 'c2@mail.com', '1999-10-05'),
        (3, 'Hoang Van H', '333333333333', '0933333333', 'Nam Dinh', 'c3@mail.com', '1997-01-21'),
