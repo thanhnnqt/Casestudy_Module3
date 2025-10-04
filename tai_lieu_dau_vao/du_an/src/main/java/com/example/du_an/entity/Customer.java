@@ -2,38 +2,38 @@ package com.example.du_an.entity;
 
 import java.time.LocalDate;
 
-public class Employee {
+public class Customer {
     private int iD;
     private int accountId;
     private String fullName;
-    private LocalDate dob;
-    private String phoneNumber;
-    private double salary;
-    private String email;
     private String citizenNumber;
+    private String phoneNumber;
+    private String address;
+    private String email;
+    private LocalDate dob;
 
-    public Employee() {
+    public Customer() {
     }
 
-    public Employee(int accountId, String fullName, LocalDate dob, String phoneNumber, double salary, String email, String citizenNumber) {
+    public Customer(int accountId, String fullName, String citizenNumber, String phoneNumber, String address, String email, LocalDate dob) {
         this.accountId = accountId;
         this.fullName = fullName;
-        this.dob = dob;
-        this.phoneNumber = phoneNumber;
-        this.salary = salary;
-        this.email = email;
         this.citizenNumber = citizenNumber;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.email = email;
+        this.dob = dob;
     }
 
-    public Employee(int iD, int accountId, String fullName, LocalDate dob, String phoneNumber, double salary, String email, String citizenNumber) {
+    public Customer(int iD, int accountId, String fullName, String citizenNumber, String phoneNumber, String address, String email, LocalDate dob) {
         this.iD = iD;
         this.accountId = accountId;
         this.fullName = fullName;
-        this.dob = dob;
-        this.phoneNumber = phoneNumber;
-        this.salary = salary;
-        this.email = email;
         this.citizenNumber = citizenNumber;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.email = email;
+        this.dob = dob;
     }
 
     public int getId() {
@@ -60,12 +60,12 @@ public class Employee {
         this.fullName = fullName;
     }
 
-    public LocalDate getDob() {
-        return dob;
+    public String getCitizenNumber() {
+        return citizenNumber;
     }
 
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
+    public void setCitizenNumber(String citizenNumber) {
+        this.citizenNumber = citizenNumber;
     }
 
     public String getPhoneNumber() {
@@ -76,12 +76,12 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
-    public double getSalary() {
-        return salary;
+    public String getAddress() {
+        return address;
     }
 
-    public void setSalary(double salary) {
-        this.salary = salary;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEmail() {
@@ -92,11 +92,11 @@ public class Employee {
         this.email = email;
     }
 
-    public String getCitizenNumber() {
-        return citizenNumber;
+    public LocalDate getDob() {
+        return dob;
     }
 
-    public void setCitizenNumber(String citizenNumber) {
-        this.citizenNumber = citizenNumber;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 }
