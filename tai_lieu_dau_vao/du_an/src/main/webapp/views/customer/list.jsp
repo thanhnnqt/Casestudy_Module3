@@ -13,11 +13,11 @@
     <c:import url="/views/layout/library.jsp"/>
 </head>
 <body>
-<div class="d-flex h-100 w-100">
+<div class="d-flex w-100">
     <c:import url="/views/layout/sidebar.jsp"/>
-    <div class="col-md-10">
+    <div class="col-md-10 bg-dark">
         <h3>Admin</h3>
-        <h3 class="text-md-center">Customer list</h3>
+        <h3 class="text-md-center text-light">Customer list</h3>
         <table class="table table-striped table-dark">
             <thead>
             <tr>
