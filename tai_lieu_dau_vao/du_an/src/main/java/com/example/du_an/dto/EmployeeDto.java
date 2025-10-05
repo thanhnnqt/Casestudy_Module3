@@ -1,9 +1,9 @@
-package com.example.du_an.entity;
+package com.example.du_an.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Employee {
+public class EmployeeDto {
     private int employeeId;
     private int accountId;
     private String fullName;
@@ -12,21 +12,9 @@ public class Employee {
     private BigDecimal salary;
     private String email;
     private String citizenNumber;
+    private String userName; // Thêm userName
 
-    public Employee() {
-    }
-
-    public Employee(int accountId, String fullName, LocalDate dob, String phoneNumber, BigDecimal salary, String email, String citizenNumber) {
-        this.accountId = accountId;
-        this.fullName = fullName;
-        this.dob = dob;
-        this.phoneNumber = phoneNumber;
-        this.salary = salary;
-        this.email = email;
-        this.citizenNumber = citizenNumber;
-    }
-
-    public Employee(int employeeId, int accountId, String fullName, LocalDate dob, String phoneNumber, BigDecimal salary, String email, String citizenNumber) {
+    public EmployeeDto(int employeeId, int accountId, String fullName, LocalDate dob, String phoneNumber, BigDecimal salary, String email, String citizenNumber, String userName) {
         this.employeeId = employeeId;
         this.accountId = accountId;
         this.fullName = fullName;
@@ -35,8 +23,10 @@ public class Employee {
         this.salary = salary;
         this.email = email;
         this.citizenNumber = citizenNumber;
+        this.userName = userName;
     }
 
+    // Getters and Setters cho tất cả các trường
     public int getEmployeeId() {
         return employeeId;
     }
@@ -99,5 +89,13 @@ public class Employee {
 
     public void setCitizenNumber(String citizenNumber) {
         this.citizenNumber = citizenNumber;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
