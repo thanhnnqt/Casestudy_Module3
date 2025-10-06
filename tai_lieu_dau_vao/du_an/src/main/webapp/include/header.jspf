@@ -1,0 +1,19 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="logo" href="<%=request.getContextPath()%>/index.jsp">
+        </a>
+
+        <nav class="main-nav" id="mainNav">
+            <ul>
+                <li><a href="<%=request.getContextPath()%>/index.jsp">Trang chủ</a></li>
+                <li><a href="<%=request.getContextPath()%>/views/products.jsp">Sản phẩm</a></li>
+                <li><a href="<%=request.getContextPath()%>/views/about.jsp">Giới thiệu</a></li>
+                <li><a href="<%=request.getContextPath()%>/views/contact.jsp">Liên hệ</a></li>
+                <li><a class="btn-login" href="<%=request.getContextPath()%>/views/login.jsp">Đăng nhập</a></li>
+            </ul>
+        </nav>
+
+        <button id="hamburger" class="hamburger" aria-label="menu">☰</button>
+    </div>
+</header>
