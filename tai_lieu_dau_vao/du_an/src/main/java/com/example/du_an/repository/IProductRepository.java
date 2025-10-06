@@ -10,4 +10,6 @@ public interface IProductRepository {
     Product findById(int id);
     Product findByName(String name);
     List<Product> findAll();
+    boolean updateStatusToLiquidated(int productId);
+    List<Product> findByStatus(String status);
 }

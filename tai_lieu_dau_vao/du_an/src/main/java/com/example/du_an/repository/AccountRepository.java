@@ -7,7 +7,6 @@
     import java.util.List;
 
     public class AccountRepository {
-        // Thêm tài khoản mới
         public boolean add(Account account) {
             if (account.getUsername() == null || account.getUsername().trim().isEmpty()) {
                 throw new IllegalArgumentException("Username không được để trống");

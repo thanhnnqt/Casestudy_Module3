@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ProductRepository implements IProductRepository {
 
+    private static final String UPDATE_STATUS_LIQUIDATED =
+            "UPDATE product SET status = 'liquidated' WHERE product_id = ?";
     @Override
     public boolean create(Product product) {
         String sql = "INSERT INTO product(product_name, description, pawn_price, status) VALUES (?, ?, ?, ?)";
@@ -103,5 +105,31 @@ public class ProductRepository implements IProductRepository {
         }
         return product;
     }
-    
+    @Override
+    public boolean updateStatusToLiquidated(int productId) {
+        try (Connection connection = BaseRepository.getConnectDB();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_STATUS_LIQUIDATED)) {
+            ps.setInt(1, productId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public List<Product> findByStatus(String status) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT product_id, product_name FROM product WHERE status = ?";
+        try (Connection connection = BaseRepository.getConnectDB();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    products.add(new Product(rs.getInt("product_id"), rs.getString("product_name")));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 }
