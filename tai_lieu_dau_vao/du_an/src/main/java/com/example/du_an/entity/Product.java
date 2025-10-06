@@ -3,6 +3,9 @@ package com.example.du_an.entity;
 import java.math.BigDecimal;
 
 public class Product {
+    public Product(int productId, String productName) {
+    }
+
     public enum Status {
         DANG_CAM("Đang cầm"),
         DA_CHUOC("Đã chuộc"),
