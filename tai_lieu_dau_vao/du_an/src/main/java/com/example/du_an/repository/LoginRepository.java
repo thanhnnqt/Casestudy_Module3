@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 
 public class LoginRepository {
     public Login login(String username, String password) {
-        String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM account WHERE username = ? AND password_hash = ?";
         try (Connection conn = BaseRepository.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);

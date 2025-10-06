@@ -18,7 +18,10 @@
 <body>
 <div class="container mt-4">
     <c:import url="../layout/navbar.jsp"/>
-    <h1>Danh sách sản phẩm</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">📄 Danh sách hợp đồng thanh lý</h2>
+        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>
+    </div>
     <form method="get" action="/liquidation-contract" class="row g-2 mb-3">
         <input type="hidden" name="action" value="search"/>
         <div class="col-md-4">
