@@ -17,8 +17,34 @@
 <div class="d-flex h-100 w-100">
     <c:import url="/views/layout/sidebar.jsp"/>
     <div class="col-md-10">
-        <canvas></canvas>
+        <canvas id="myChart" width="400" height="200"></canvas>
     </div>
 </div>
+
+<script>
+    const labels = ${month};
+    const dataValues = ${interestRate};
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,   // cần convert thành JSON string
+            datasets: [{
+                label: 'Interest rate/Month',
+                data: dataValues,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>
