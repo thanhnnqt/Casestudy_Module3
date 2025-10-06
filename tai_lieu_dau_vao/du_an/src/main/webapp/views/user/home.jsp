@@ -14,6 +14,9 @@
     <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-outline-secondary me-2">
         🏠 Về trang chủ
     </a>
+    <a href="${pageContext.request.contextPath}/customer-history" class="btn btn-primary me-2">
+        👨‍💼 Xem lịch sử giao dịch
+    </a>
     <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger">
         🚪 Đăng xuất
     </a>

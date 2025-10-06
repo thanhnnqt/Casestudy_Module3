@@ -6,6 +6,16 @@ public class Login {
     private String password;
     private String role;
 
+    public Login() {
+    }
+
+    public Login(String username, String password, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
