@@ -16,4 +16,5 @@ public interface ICustomerService {
 
     List<Customer> getAllCustomers();
     Customer findById(int id);
+    Customer findByAccountId(int accountId);
 }
