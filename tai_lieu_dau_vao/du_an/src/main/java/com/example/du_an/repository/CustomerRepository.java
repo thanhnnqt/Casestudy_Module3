@@ -162,4 +162,19 @@ public class CustomerRepository {
         );
     }
 
+    public Customer findByAccountId(int accountId) {
+        String sql = "SELECT * FROM customer WHERE account_id = ?";
+        try (Connection conn = BaseRepository.getConnectDB();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapToCustomer(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+
