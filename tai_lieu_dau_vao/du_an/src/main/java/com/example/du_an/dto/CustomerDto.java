@@ -12,6 +12,7 @@ public class CustomerDto {
     private String email;
     private LocalDate dob;
     private String userName;
+    private LocalDate pawn_date;
 
     public CustomerDto(int iD, int accountId, String fullName, String citizenNumber, String phoneNumber, String address, String email, LocalDate dob, String userName) {
         this.iD = iD;
@@ -23,6 +24,19 @@ public class CustomerDto {
         this.email = email;
         this.dob = dob;
         this.userName = userName;
+    }
+
+    public CustomerDto(int iD, int accountId, String fullName, String citizenNumber, String phoneNumber, String address, String email, LocalDate dob, String userName, LocalDate pawn_date) {
+        this.iD = iD;
+        this.accountId = accountId;
+        this.fullName = fullName;
+        this.citizenNumber = citizenNumber;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.email = email;
+        this.dob = dob;
+        this.userName = userName;
+        this.pawn_date = pawn_date;
     }
 
     public int getId() {
@@ -95,5 +109,21 @@ public class CustomerDto {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public int getiD() {
+        return iD;
+    }
+
+    public void setiD(int iD) {
+        this.iD = iD;
+    }
+
+    public LocalDate getPawn_date() {
+        return pawn_date;
+    }
+
+    public void setPawn_date(LocalDate pawn_date) {
+        this.pawn_date = pawn_date;
     }
 }
