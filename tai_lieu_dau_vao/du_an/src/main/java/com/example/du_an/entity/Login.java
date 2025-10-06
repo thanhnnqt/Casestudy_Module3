@@ -5,6 +5,8 @@ public class Login {
     private String username;
     private String password;
     private String role;
+
+    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
