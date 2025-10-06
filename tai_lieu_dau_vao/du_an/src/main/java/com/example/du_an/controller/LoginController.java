@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 @WebServlet("/login")
@@ -32,21 +31,8 @@ public class LoginController extends HttpServlet {
             HttpSession session = req.getSession();
             session.setAttribute("account", acc);
 
-            // Điều hướng theo role
-            switch (acc.getRole()) {
-                case "ADMIN":
-                    resp.sendRedirect("/admin-home");
-                    break;
-                case "STAFF":
-                    resp.sendRedirect("/employee-home");
-                    break;
-                case "USER":
-                    resp.sendRedirect("/customer-home");
-                    break;
-                default:
-                    resp.sendRedirect("views/login/login.jsp");
-                    break;
-            }
+            // ✅ Quay về trang chủ
+            resp.sendRedirect(req.getContextPath() + "/index.jsp");
         } else {
             req.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
             req.getRequestDispatcher("views/login/login.jsp").forward(req, resp);
