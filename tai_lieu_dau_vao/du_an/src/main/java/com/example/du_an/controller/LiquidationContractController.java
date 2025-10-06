@@ -1,5 +1,7 @@
 package com.example.du_an.controller;
 
+import com.example.du_an.dto.LiquidationContractDto;
+import com.example.du_an.dto.LiquidationProductDto;
 import com.example.du_an.entity.Customer;
 import com.example.du_an.entity.Employee; // Thêm import Employee
 import com.example.du_an.entity.LiquidationContract;
@@ -19,9 +21,9 @@ public class LiquidationContractController extends HttpServlet {
 
     private final ILiquidationContractService liquidationService = new LiquidationContractService();
     private final ICustomerService customerService = new CustomerService();
-    private final IAccountService accountService = new AccountService();
     private final IProductService productService = new ProductService();
     private final IEmployeeService employeeService = new EmployeeService(); // Thêm service cho nhân viên
+    private final ILiquidationProductService liquidationProductService = new LiquidationProductService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -76,7 +78,7 @@ public class LiquidationContractController extends HttpServlet {
     private void showCreateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Lấy danh sách nhân viên và sản phẩm để hiển thị trên form
         List<Employee> employeeList = employeeService.getAllEmployees();
-        List<Product> productList = productService.findByStatus("Đã thanh lý");
+        List<Product> productList = productService.findByStatus("Thanh lý");
 
         req.setAttribute("employees", employeeList);
         req.setAttribute("products", productList);
@@ -92,12 +94,12 @@ public class LiquidationContractController extends HttpServlet {
 
         // Vẫn cần gửi danh sách nhân viên và sản phẩm khi kiểm tra xong
         List<Employee> employeeList = employeeService.getAllEmployees();
-        List<Product> productList = productService.findByStatus("Đã thanh lý");
+        List<LiquidationProductDto> contractList = liquidationService.findProduct();
 
         req.setAttribute("existingCustomer", customer);
         req.setAttribute("phoneOrCCCD", phoneOrCCCD);
         req.setAttribute("employees", employeeList);
-        req.setAttribute("products", productList);
+        req.setAttribute("products", contractList);
         req.getRequestDispatcher("views/liquidation_contract/add.jsp").forward(req, resp);
     }
 

@@ -36,7 +36,7 @@
             <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
         </div>
         <div class="col-md-3">
-            <a href="/liquidation-contract?action=create" class="btn btn-success w-100">+ Thêm sản phẩm</a>
+            <a href="/liquidation-contract?action=create" class="btn btn-success w-100">Tạo mới hợp đồng thanh lý</a>
         </div>
     </form>
     <table id="tableProduct" class="table table-dark table-striped">
@@ -48,7 +48,6 @@
             <th>Ngày tạo hợp đồng</th>
             <th>Giá trị hợp đồng</th>
             <th>Tên sản phẩm</th>
-            <th>Thao tác</th>
         </tr>
         </thead>
         <tbody>
@@ -60,43 +59,43 @@
                 <td>${contract.liquidationDate}</td>
                 <td><fmt:formatNumber value="${contract.liquidationPrice}" type="currency" currencySymbol="₫"/></td>
                 <td>${contract.productName}</td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal"
-                            data-bs-target="#deleteModal${contract.liquidationContractId}">
-                        Xóa
-                    </button>
+<%--                <td>--%>
+<%--                    <button type="button" class="btn btn-danger btn-sm"--%>
+<%--                            data-bs-toggle="modal"--%>
+<%--                            data-bs-target="#deleteModal${contract.liquidationContractId}">--%>
+<%--                        Xóa--%>
+<%--                    </button>--%>
 
-                    <!-- Modal xác nhận -->
-                    <div class="modal fade" id="deleteModal${contract.liquidationContractId}" tabindex="-1"
-                         aria-labelledby="deleteModalLabel${contract.liquidationContractId}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" style="color: black"
-                                        id="deleteModalLabel${contract.liquidationContractId}">
-                                        Xác nhận xóa sản phẩm
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-color-black" style="color: black">
-                                    Bạn có chắc muốn xóa <strong>${contract.liquidationContractId}</strong> không?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Hủy
-                                    </button>
-                                    <!-- Nút Xóa thật sự -->
-                                    <a href="/liquidation-contract?action=delete&liquidation_contract_id=${contract.liquidationContractId}"
-                                       class="btn btn-danger">
-                                        Xóa
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
+<%--                    <!-- Modal xác nhận -->--%>
+<%--                    <div class="modal fade" id="deleteModal${contract.liquidationContractId}" tabindex="-1"--%>
+<%--                         aria-labelledby="deleteModalLabel${contract.liquidationContractId}" aria-hidden="true">--%>
+<%--                        <div class="modal-dialog">--%>
+<%--                            <div class="modal-content">--%>
+<%--                                <div class="modal-header">--%>
+<%--                                    <h5 class="modal-title" style="color: black"--%>
+<%--                                        id="deleteModalLabel${contract.liquidationContractId}">--%>
+<%--                                        Xác nhận xóa sản phẩm--%>
+<%--                                    </h5>--%>
+<%--                                    <button type="button" class="btn-close" data-bs-dismiss="modal"--%>
+<%--                                            aria-label="Close"></button>--%>
+<%--                                </div>--%>
+<%--                                <div class="modal-body text-color-black" style="color: black">--%>
+<%--                                    Bạn có chắc muốn xóa <strong>${contract.liquidationContractId}</strong> không?--%>
+<%--                                </div>--%>
+<%--                                <div class="modal-footer">--%>
+<%--                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">--%>
+<%--                                        Hủy--%>
+<%--                                    </button>--%>
+<%--                                    <!-- Nút Xóa thật sự -->--%>
+<%--                                    <a href="/liquidation-contract?action=delete&liquidation_contract_id=${contract.liquidationContractId}"--%>
+<%--                                       class="btn btn-danger">--%>
+<%--                                        Xóa--%>
+<%--                                    </a>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                </td>--%>
             </tr>
         </c:forEach>
         </tbody>

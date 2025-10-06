@@ -1,5 +1,6 @@
 package com.example.du_an.service;
 
+import com.example.du_an.dto.LiquidationProductDto;
 import com.example.du_an.entity.LiquidationContract;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface ILiquidationContractService {
     LiquidationContract findById(int id);
     List<LiquidationContract> search(String name, String categoryId);
     LiquidationContract findByIdProduct(int id);
+    List<LiquidationProductDto> findProduct();
 }

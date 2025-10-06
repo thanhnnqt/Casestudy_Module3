@@ -36,7 +36,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10 form-container">
             <h2 class="mb-4">Thêm hợp đồng thanh lý mới</h2>
-
+            <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>
             <div class="form-check-container mb-4">
                 <form action="/liquidation-contract" method="get">
                     <input type="hidden" name="action" value="checkCustomer">

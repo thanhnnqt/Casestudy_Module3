@@ -1,5 +1,6 @@
 package com.example.du_an.repository;
 
+import com.example.du_an.dto.LiquidationProductDto;
 import com.example.du_an.entity.LiquidationContract;
 
 import java.sql.*;
@@ -13,6 +14,7 @@ public class LiquidationContractRepository implements ILiquidationContractReposi
     private static final String INSERT = "insert into liquidation_contract " +
             "(liquidation_date, price, customer_id, employee_id, product_id) values(?, ?, ?, ?, ?)";
     private static final String DELETE = "delete from liquidation_contract where liquidation_contract_id = ?";
+    private static final String FIND_PRODUCT ="select product_id, product_name from product where status = 'Thanh lý'";
 
     @Override
     public List<LiquidationContract> findAll() {
@@ -111,5 +113,23 @@ public class LiquidationContractRepository implements ILiquidationContractReposi
 
     public LiquidationContract findByIdContract(int id) {
         return null;
+    }
+
+    @Override
+    public List<LiquidationProductDto> findProduct() {
+        List<LiquidationProductDto> productListNameId = new ArrayList<>();
+        Connection connection = BaseRepository.getConnectDB();
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_PRODUCT);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("product_id");
+                String name = rs.getString("product_name");
+                productListNameId.add(new LiquidationProductDto(id, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productListNameId;
     }
 }
