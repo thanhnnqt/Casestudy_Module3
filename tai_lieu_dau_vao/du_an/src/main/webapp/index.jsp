@@ -7,8 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cầm Đồ Nhanh | Giải Pháp Tài Chính Tin Cậy</title>
 
-<%--    <link href="<%= request.getContextPath() %>/bootstrap520/css/bootstrap.min.css" rel="stylesheet">--%>
-<%--    <link rel="stylesheet" href="<%= request.getContextPath() %>/fontawesome-free-7.1.0-web/css/all.min.css" />--%>
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
@@ -148,9 +151,11 @@
                                 </a>
                             </c:when>
                             <c:when test="${sessionScope.account.role eq 'USER'}">
-                                <a href="<%= request.getContextPath() %>/customer-home" class="btn btn-outline-light btn-lg shadow-lg fw-bold px-4">
+                                <a href="<%= request.getContextPath() %>/customer-home"
+                                   class="btn btn-light btn-lg shadow-lg fw-bold px-4 text-danger">
                                     <i class="fa-solid fa-user me-2"></i> Trang Của Tôi
                                 </a>
+
                             </c:when>
                         </c:choose>
                     </c:if>
@@ -321,7 +326,7 @@
     </div>
 </footer>
 
-<!-- Bootstrap JS -->
-<%--<script src="<%= request.getContextPath() %>/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>--%>
+<!-- Bootstrap Bundle JS (CDN, có Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
