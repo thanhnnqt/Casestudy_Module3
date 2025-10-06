@@ -1,14 +1,14 @@
-package com.example.du_an.repository;
+package com.example.du_an.service;
 
 import com.example.du_an.entity.LiquidationContract;
 
 import java.util.List;
 
-public interface ILiquidationContractRepository {
+public interface ILiquidationContractService {
     List<LiquidationContract> findAll();
     boolean add(LiquidationContract liquidationContract);
     boolean delete(int id);
     LiquidationContract findById(int id);
     List<LiquidationContract> search(String name, String categoryId);
-    LiquidationContract findByIdContract(int id);
+    LiquidationContract findByIdProduct(int id);
 }
