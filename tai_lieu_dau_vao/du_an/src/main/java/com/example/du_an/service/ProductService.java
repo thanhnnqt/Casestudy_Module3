@@ -31,4 +31,11 @@ public class ProductService implements IProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
+    public boolean updateStatusToLiquidated(int productId) {
+        return productRepository.updateStatusToLiquidated(productId);
+    }
+    @Override
+    public List<Product> findByStatus(String status) {
+        return productRepository.findByStatus(status);
+    }
 }
