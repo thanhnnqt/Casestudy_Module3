@@ -1,67 +1,49 @@
 package com.example.du_an.entity;
 
+import java.math.BigDecimal;
+
 public class Product {
-    private int iD;
+    public enum Status {
+        DANG_CAM("Đang cầm"),
+        DA_CHUOC("Đã chuộc"),
+        THANH_LY("Thanh lý");
+
+        private final String label;
+
+        Status(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
+
+    private int productId;
     private String productName;
     private String description;
-    private double pawnPrice;
-    private String status;
+    private BigDecimal pawnPrice;
+    private Status status;
 
-    public Product() {
-    }
+    public Product() {}
 
-    public Product(String productName, String description, double pawnPrice, String status) {
+    public Product(int productId, String productName, String description, BigDecimal pawnPrice, Status status) {
+        this.productId = productId;
         this.productName = productName;
         this.description = description;
         this.pawnPrice = pawnPrice;
         this.status = status;
     }
 
-    public Product(int iD, String productName, String description, double pawnPrice, String status) {
-        this.iD = iD;
-        this.productName = productName;
-        this.description = description;
-        this.pawnPrice = pawnPrice;
-        this.status = status;
-    }
-
-    public int getId() {
-        return iD;
-    }
-
-    public void setId(int iD) {
-        this.iD = iD;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPawnPrice() {
-        return pawnPrice;
-    }
-
-    public void setPawnPrice(double pawnPrice) {
-        this.pawnPrice = pawnPrice;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    // Getter / Setter
+    public int getProductId() { return productId; }
+    public void setProductId(int productId) { this.productId = productId; }
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public BigDecimal getPawnPrice() { return pawnPrice; }
+    public void setPawnPrice(BigDecimal pawnPrice) { this.pawnPrice = pawnPrice; }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
 }

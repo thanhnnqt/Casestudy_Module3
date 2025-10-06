@@ -3,7 +3,7 @@ package com.example.du_an.entity;
 import java.time.LocalDate;
 
 public class Customer {
-    private int iD;
+    private int customerId;
     private int accountId;
     private String fullName;
     private String citizenNumber;
@@ -11,11 +11,9 @@ public class Customer {
     private String address;
     private String email;
     private LocalDate dob;
-
-    public Customer() {
-    }
-
-    public Customer(int accountId, String fullName, String citizenNumber, String phoneNumber, String address, String email, LocalDate dob) {
+    // Constructor không có ID (dùng khi tạo mới)
+    public Customer(int accountId, String fullName, String citizenNumber, String phoneNumber,
+                    String address, String email, LocalDate dob) {
         this.accountId = accountId;
         this.fullName = fullName;
         this.citizenNumber = citizenNumber;
@@ -25,8 +23,10 @@ public class Customer {
         this.dob = dob;
     }
 
-    public Customer(int iD, int accountId, String fullName, String citizenNumber, String phoneNumber, String address, String email, LocalDate dob) {
-        this.iD = iD;
+    // Constructor có ID (dùng khi lấy từ DB)
+    public Customer(int customerId, int accountId, String fullName, String citizenNumber, String phoneNumber,
+                    String address, String email, LocalDate dob) {
+        this.customerId = customerId;
         this.accountId = accountId;
         this.fullName = fullName;
         this.citizenNumber = citizenNumber;
@@ -36,67 +36,28 @@ public class Customer {
         this.dob = dob;
     }
 
-    public int getId() {
-        return iD;
-    }
+    // Getter & Setter
+    public int getCustomerId() { return customerId; }
+    public void setCustomerId(int customerId) { this.customerId = customerId; }
 
-    public void setId(int iD) {
-        this.iD = iD;
-    }
+    public int getAccountId() { return accountId; }
+    public void setAccountId(int accountId) { this.accountId = accountId; }
 
-    public int getAccountId() {
-        return accountId;
-    }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
-    }
+    public String getCitizenNumber() { return citizenNumber; }
+    public void setCitizenNumber(String citizenNumber) { this.citizenNumber = citizenNumber; }
 
-    public String getFullName() {
-        return fullName;
-    }
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public String getCitizenNumber() {
-        return citizenNumber;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setCitizenNumber(String citizenNumber) {
-        this.citizenNumber = citizenNumber;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
+    public LocalDate getDob() { return dob; }
+    public void setDob(LocalDate dob) { this.dob = dob; }
 }
