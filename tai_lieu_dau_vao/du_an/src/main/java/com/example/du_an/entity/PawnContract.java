@@ -1,50 +1,49 @@
 package com.example.du_an.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PawnContract {
-    private int iD;
+    private int pawnContractId;
     private int customerId;
     private int employeeId;
     private int productId;
-    LocalDate pawnDate;
-    private double pawnPrice;
-    private double interest_rate;
-    private LocalDate due_date;
-    private LocalDate return_date;
+    private LocalDate pawnDate;
+    private BigDecimal pawnPrice;
+    private BigDecimal interestRate;
+    private LocalDate dueDate;
+    private LocalDate returnDate;
 
     public PawnContract() {
     }
 
-    public PawnContract(int customerId, int employeeId, int productId, LocalDate pawnDate, double pawnPrice, double interest_rate, LocalDate due_date, LocalDate return_date) {
+    public PawnContract(int pawnContractId, int customerId, int employeeId, int productId, LocalDate pawnDate, BigDecimal pawnPrice, BigDecimal interestRate, LocalDate dueDate, LocalDate returnDate) {
+        this.pawnContractId = pawnContractId;
         this.customerId = customerId;
         this.employeeId = employeeId;
         this.productId = productId;
         this.pawnDate = pawnDate;
         this.pawnPrice = pawnPrice;
-        this.interest_rate = interest_rate;
-        this.due_date = due_date;
-        this.return_date = return_date;
+        this.interestRate = interestRate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
     }
-
-    public PawnContract(int iD, int customerId, int employeeId, int productId, LocalDate pawnDate, double pawnPrice, double interest_rate, LocalDate due_date, LocalDate return_date) {
-        this.iD = iD;
+    public PawnContract( int customerId, int employeeId, int productId, LocalDate pawnDate, BigDecimal pawnPrice, BigDecimal interestRate, LocalDate dueDate, LocalDate returnDate) {
         this.customerId = customerId;
         this.employeeId = employeeId;
         this.productId = productId;
         this.pawnDate = pawnDate;
         this.pawnPrice = pawnPrice;
-        this.interest_rate = interest_rate;
-        this.due_date = due_date;
-        this.return_date = return_date;
+        this.interestRate = interestRate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+    }
+    public int getPawnContractId() {
+        return pawnContractId;
     }
 
-    public int getId() {
-        return iD;
-    }
-
-    public void setId(int iD) {
-        this.iD = iD;
+    public void setPawnContractId(int pawnContractId) {
+        this.pawnContractId = pawnContractId;
     }
 
     public int getCustomerId() {
@@ -79,35 +78,35 @@ public class PawnContract {
         this.pawnDate = pawnDate;
     }
 
-    public double getPawnPrice() {
+    public BigDecimal getPawnPrice() {
         return pawnPrice;
     }
 
-    public void setPawnPrice(double pawnPrice) {
+    public void setPawnPrice(BigDecimal pawnPrice) {
         this.pawnPrice = pawnPrice;
     }
 
-    public double getInterest_rate() {
-        return interest_rate;
+    public BigDecimal getInterestRate() {
+        return interestRate;
     }
 
-    public void setInterest_rate(double interest_rate) {
-        this.interest_rate = interest_rate;
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 
-    public LocalDate getDue_date() {
-        return due_date;
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
-    public void setDue_date(LocalDate due_date) {
-        this.due_date = due_date;
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
-    public LocalDate getReturn_date() {
-        return return_date;
+    public LocalDate getReturnDate() {
+        return returnDate;
     }
 
-    public void setReturn_date(LocalDate return_date) {
-        this.return_date = return_date;
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
     }
 }

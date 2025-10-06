@@ -9,7 +9,7 @@
 <h1><%= "Hello World!" %>
 </h1>
 <br/>
-<c:redirect url="/login"/>
+<c:redirect url="/pawn-contracts"/>
 <a href="hello-servlet">Hello Servlet</a>
 </body>
 </html>
