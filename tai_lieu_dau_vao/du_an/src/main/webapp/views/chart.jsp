@@ -144,7 +144,7 @@
         data: {
             labels,
             datasets: [{
-                label: 'Lãi suất (%)',
+                label: 'Lợi nhuận (VNĐ)',
                 data: dataValues,
                 backgroundColor: createGradient(ctx),         // màu bình thường
                 borderColor: '#0d6efd',
