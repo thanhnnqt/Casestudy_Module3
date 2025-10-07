@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -5,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Customer Home</title>
     <link href="<%= request.getContextPath() %>/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <c:import url="/views/layout/library.jsp"/>;
 </head>
 <body class="bg-light">
 <div class="container py-5 text-center">
@@ -17,6 +19,13 @@
     <a href="${pageContext.request.contextPath}/customer-history" class="btn btn-primary me-2">
         👨‍💼 Xem lịch sử giao dịch
     </a>
+
+
+    <a class="btn btn-primary me-2" href="/update?id=${account.id}">
+        Chỉnh sửa thông tin
+    </a>
+
+
     <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger">
         🚪 Đăng xuất
     </a>

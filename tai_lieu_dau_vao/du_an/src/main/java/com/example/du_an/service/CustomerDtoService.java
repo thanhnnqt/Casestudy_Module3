@@ -13,4 +13,10 @@ public class CustomerDtoService implements ICustomerDtoService
     public List<CustomerDto> findAll() {
         return customerDtoRepository.findAll();
     }
+
+    @Override
+    public List<CustomerDto> findByName(String name, String citizenNumber) {
+        return customerDtoRepository.findByName(name, citizenNumber);
+    }
+
 }

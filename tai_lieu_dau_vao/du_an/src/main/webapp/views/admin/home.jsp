@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Admin Home</title>
     <link href="<%= request.getContextPath() %>/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <c:import url="/views/layout/library.jsp"/>
 </head>
 <body class="bg-light">
 <div class="container py-5 text-center">
@@ -22,6 +23,9 @@
         <%--  QUẢN LÝ NHÂN VIÊN --%>
         <a href="${pageContext.request.contextPath}/employees" class="btn btn-primary me-2">
             👨‍💼 Quản lý Nhân viên
+        </a>
+        <a href="${pageContext.request.contextPath}/customer?action=list" class="btn btn-primary me-2">
+            👨‍💼 Quản lý khách hàng
         </a>
 
         <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger">

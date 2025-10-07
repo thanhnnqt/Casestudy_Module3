@@ -13,6 +13,7 @@ import java.util.List;
 public class CustomerDtoRepository implements ICustomerDtoRepository {
     static final String SELECT_ALL = "select c.*, pc.*, a.* from customer c \n" +
             "join `account` a on c.account_id = a.account_id join `pawn_contract` pc on c.customer_id = pc.customer_id;";
+    static final String SELECT_BY_NAME = "select * from customer c join `account` a on c.account_id = a.account_id where c.full_name like ? and c.citizen_number like ?";
 
     @Override
     public List<CustomerDto> findAll() {
@@ -38,6 +39,33 @@ public class CustomerDtoRepository implements ICustomerDtoRepository {
             e.printStackTrace();
         }
         return customerDtos;
+    }
+
+    @Override
+    public List<CustomerDto> findByName(String name, String citizenNumberSearch) {
+        Connection connection = BaseRepository.getConnectDB();
+        List<CustomerDto> customerDtoList = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_NAME);
+            preparedStatement.setString(1, "%" + name + "%");
+            preparedStatement.setString(2, "%" + citizenNumberSearch + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int iD = rs.getInt("customer_id");
+                int accountId = rs.getInt("account_id");
+                String fullName = rs.getString("full_name");
+                String citizenNumber = rs.getString("citizen_number");
+                String phoneNumber = rs.getString("phone_number");
+                String address = rs.getString("address");
+                String email = rs.getString("email");
+                LocalDate dob = LocalDate.parse(rs.getString("dob"));
+                String userName = rs.getString("username");
+                customerDtoList.add(new CustomerDto(iD, accountId, fullName, citizenNumber, phoneNumber, address, email, dob, userName));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerDtoList;
     }
 }
 

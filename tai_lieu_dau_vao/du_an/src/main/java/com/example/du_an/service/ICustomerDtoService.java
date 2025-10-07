@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ICustomerDtoService {
     List<CustomerDto> findAll();
+
+    List<CustomerDto> findByName(String name, String citizenNumber);
 }

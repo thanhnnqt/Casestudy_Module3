@@ -10,7 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChartDtoRepository implements IChartDtoRepository {
-    static final String SELECT = "select sum(p.interest_rate) as interest_rate, month(p.pawn_date) as `month` from pawn_contract p group by `month`";
+    static final String SELECT = "SELECT \n" +
+            "    DATE_FORMAT(pc.pawn_date, '%m') AS month,\n" +
+            "    SUM(pc.pawn_price) AS total_revenue\n" +
+            "FROM pawn_contract pc\n" +
+            "WHERE YEAR(pc.pawn_date) = 2025\n" +
+            "GROUP BY DATE_FORMAT(pc.pawn_date, '%m')\n" +
+            "ORDER BY month;\n";
 
     @Override
     public List<ChartDto> findAll() {
@@ -20,8 +26,8 @@ public class ChartDtoRepository implements IChartDtoRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                double interestRate = rs.getDouble("interest_rate");
-                int moth = rs.getInt("interest_rate");
+                double interestRate = rs.getDouble("total_revenue");
+                int moth = rs.getInt("month");
                 chartDtoList.add(new ChartDto(interestRate, moth));
             }
         } catch (SQLException e) {
