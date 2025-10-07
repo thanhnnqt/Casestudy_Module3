@@ -1,8 +1,11 @@
 package com.example.du_an.repository;
 
+import com.example.du_an.dto.LiquidationContractDto;
 import com.example.du_an.dto.LiquidationProductDto;
 import com.example.du_an.entity.LiquidationContract;
+import com.example.du_an.entity.Product;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +17,8 @@ public class LiquidationContractRepository implements ILiquidationContractReposi
     private static final String INSERT = "insert into liquidation_contract " +
             "(liquidation_date, price, customer_id, employee_id, product_id) values(?, ?, ?, ?, ?)";
     private static final String DELETE = "delete from liquidation_contract where liquidation_contract_id = ?";
-    private static final String FIND_PRODUCT ="select product_id, product_name from product where status = 'Thanh lý'";
+    private static final String FIND_PRODUCT = "select product_id, product_name from product where status = 'Thanh lý'";
+    private static final String FIND_PRODUCT_PRICE = "select pawn_price from product";
 
     @Override
     public List<LiquidationContract> findAll() {
@@ -131,5 +135,58 @@ public class LiquidationContractRepository implements ILiquidationContractReposi
             e.printStackTrace();
         }
         return productListNameId;
+    }
+
+    @Override
+    public List<Product> findProductPrice() {
+        List<Product> productPrice = new ArrayList<>();
+        Connection connection = BaseRepository.getConnectDB();
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_PRODUCT_PRICE);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BigDecimal price = rs.getBigDecimal("pawn_price");
+                productPrice.add(new Product(price));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productPrice;
+    }
+
+    @Override
+    public LiquidationContractDto findByIdDto(int id) {
+        String sql = "SELECT l.liquidation_contract_id AS liquidationContractId, " +
+                "c.full_name AS customerName, c.citizen_number AS citizenNumber, c.phone_number AS phoneNumber, " +
+                "p.product_name AS productName, l.price AS liquidationPrice, l.liquidation_date AS liquidationDate, " +
+                "e.full_name AS employeeName " +
+                "FROM liquidation_contract l " +
+                "JOIN customer c ON l.customer_id = c.customer_id " +
+                "JOIN product p ON l.product_id = p.product_id " +
+                "JOIN employee e ON l.employee_id = e.employee_id " +
+                "WHERE l.liquidation_contract_id = ?";
+
+        try (Connection connection = BaseRepository.getConnectDB();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    LiquidationContractDto dto = new LiquidationContractDto();
+                    dto.setLiquidationContractId(rs.getInt("liquidationContractId"));
+                    dto.setCustomerName(rs.getString("customerName"));
+                    dto.setCitizenNumber(rs.getString("citizenNumber"));
+                    dto.setPhoneNumber(rs.getString("phoneNumber"));
+                    dto.setProductName(rs.getString("productName"));
+                    dto.setLiquidationPrice(rs.getBigDecimal("liquidationPrice"));
+                    dto.setLiquidationDate(rs.getDate("liquidationDate").toLocalDate());
+                    dto.setEmployeeName(rs.getString("employeeName"));
+                    return dto;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

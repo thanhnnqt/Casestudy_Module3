@@ -1,8 +1,10 @@
 package com.example.du_an.service;
 
 
+import com.example.du_an.dto.LiquidationContractDto;
 import com.example.du_an.dto.LiquidationProductDto;
 import com.example.du_an.entity.LiquidationContract;
+import com.example.du_an.entity.Product;
 import com.example.du_an.repository.ILiquidationContractRepository;
 import com.example.du_an.repository.LiquidationContractRepository;
 
@@ -44,4 +46,14 @@ public class LiquidationContractService implements ILiquidationContractService {
     public List<LiquidationProductDto> findProduct() {
         return liquidationContractRepository.findProduct();
     }
+
+    @Override
+    public List<Product> findProductPrice() {
+        return liquidationContractRepository.findProductPrice();
+    }
+
+    public LiquidationContractDto findByIdDto(int id) {
+        return liquidationContractRepository.findByIdDto(id);
+    }
+
 }

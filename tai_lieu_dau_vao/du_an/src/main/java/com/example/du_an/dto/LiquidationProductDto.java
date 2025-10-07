@@ -15,6 +15,9 @@ public class LiquidationProductDto {
         this.productName = productName;
     }
 
+    public LiquidationProductDto(double price) {
+    }
+
     public int getProductId() {
         return productId;
     }
