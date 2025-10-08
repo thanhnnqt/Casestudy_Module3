@@ -13,16 +13,16 @@ public class ChartDtoRepository implements IChartDtoRepository {
     static final String SELECT = "SELECT \n" +
             "    DATE_FORMAT(p.pawn_date, '%m') AS month,\n" +
             "    SUM(\n" +
-            "        (p.pawn_price * (p.interest_rate / 100))        \n" +
-            "        - p.pawn_price                                  \n" +
-            "        + IFNULL(l.price, 0)                            \n" +
+            "        GREATEST(0, \n" +
+            "            (p.pawn_price * (p.interest_rate / 100))        -- lãi từ hợp đồng đã trả\n" +
+            "            + IFNULL(l.price, 0)                             -- cộng giá thanh lý (nếu có)\n" +
+            "        )\n" +
             "    ) AS total_profit\n" +
             "FROM pawn_contract p\n" +
             "LEFT JOIN liquidation_contract l \n" +
-            "       ON p.product_id = l.product_id             \n" +
-            "WHERE p.return_date IS NOT NULL  \n" +
+            "       ON p.product_id = l.product_id\n" +
+            "WHERE p.return_date IS NOT NULL\n" +
             "GROUP BY DATE_FORMAT(p.pawn_date, '%m')\n" +
-            "having total_profit > 0\n" +
             "ORDER BY month;";
 
     @Override
