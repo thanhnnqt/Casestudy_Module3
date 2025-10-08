@@ -27,7 +27,6 @@ public class ChartController extends HttpServlet {
             month[i] = chartDtoList.get(i).getMonth();
 
         }
-        System.out.println("hello chart");
         Gson gson = new Gson();
         req.setAttribute("interestRate", gson.toJson(interestRate));
         req.setAttribute("month", gson.toJson(month));

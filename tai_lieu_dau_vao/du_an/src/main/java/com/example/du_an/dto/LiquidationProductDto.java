@@ -8,12 +8,37 @@ public class LiquidationProductDto {
     private String description;
     private BigDecimal liquidationPrice;
     private LocalDate liquidationDate;
+    private int productId;
+
+    public LiquidationProductDto(int productId, String productName) {
+        this.productId = productId;
+        this.productName = productName;
+    }
+
+    public LiquidationProductDto(double price) {
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
 
     public LiquidationProductDto(String productName, String description, BigDecimal liquidationPrice, LocalDate liquidationDate) {
         this.productName = productName;
         this.description = description;
         this.liquidationPrice = liquidationPrice;
         this.liquidationDate = liquidationDate;
+    }
+
+    public LiquidationProductDto(String productName, String description, BigDecimal liquidationPrice, LocalDate liquidationDate, int productId) {
+        this.productName = productName;
+        this.description = description;
+        this.liquidationPrice = liquidationPrice;
+        this.liquidationDate = liquidationDate;
+        this.productId = productId;
     }
 
     // Getters and Setters

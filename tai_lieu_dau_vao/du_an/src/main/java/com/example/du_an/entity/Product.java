@@ -8,6 +8,11 @@ public class Product {
         this.productId = productId;
         this.productName = productName;
     }
+
+    public Product(BigDecimal price) {
+        this.pawnPrice = price;
+    }
+
     public enum Status {
         DANG_CAM("Đang cầm"),
         DA_CHUOC("Đã chuộc"),

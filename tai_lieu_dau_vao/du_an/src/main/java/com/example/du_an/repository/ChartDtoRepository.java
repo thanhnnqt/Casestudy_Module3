@@ -10,7 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChartDtoRepository implements IChartDtoRepository {
-    static final String SELECT = "select sum(p.interest_rate) as interest_rate, month(p.pawn_date) as `month` from pawn_contract p group by `month`";
+    static final String SELECT = "SELECT \n" +
+            "    DATE_FORMAT(p.pawn_date, '%m') AS month,\n" +
+            "    SUM(\n" +
+            "        (p.pawn_price * (p.interest_rate / 100))        \n" +
+            "        - p.pawn_price                                  \n" +
+            "        + IFNULL(l.price, 0)                            \n" +
+            "    ) AS total_profit\n" +
+            "FROM pawn_contract p\n" +
+            "LEFT JOIN liquidation_contract l \n" +
+            "       ON p.product_id = l.product_id             \n" +
+            "WHERE p.return_date IS NOT NULL  \n" +
+            "GROUP BY DATE_FORMAT(p.pawn_date, '%m')\n" +
+            "having total_profit > 0\n" +
+            "ORDER BY month;";
 
     @Override
     public List<ChartDto> findAll() {
@@ -20,8 +33,8 @@ public class ChartDtoRepository implements IChartDtoRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                double interestRate = rs.getDouble("interest_rate");
-                int moth = rs.getInt("interest_rate");
+                double interestRate = rs.getDouble("total_profit");
+                int moth = rs.getInt("month");
                 chartDtoList.add(new ChartDto(interestRate, moth));
             }
         } catch (SQLException e) {

@@ -33,4 +33,11 @@ public class AccountService implements IAccountService {
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
+
+    @Override
+    public boolean update(Account account) {
+        return accountRepository.update(account);
+    }
+
+
 }
