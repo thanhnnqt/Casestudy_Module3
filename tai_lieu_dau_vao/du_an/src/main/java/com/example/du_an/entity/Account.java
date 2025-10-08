@@ -9,7 +9,7 @@ public class Account {
     private String username;
     private String passwordHash;
     private Role role;
-
+    private int employeeId;
     public Account(String username, String passwordHash, Role role) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username không được để trống");
@@ -48,5 +48,11 @@ public class Account {
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+    public int getEmployeeId() {
+        return employeeId;
+    }
 
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
 }

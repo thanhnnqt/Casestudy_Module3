@@ -12,5 +12,8 @@ public interface IProductService {
     Product findByName(String name);
     List<Product> findAll();
     boolean updateStatusToLiquidated(int productId);
+    boolean updateStatus(int productId, String status);
     List<Product> findByStatus(String status);
+    void updateProductStatusForOverdueContracts();
+    boolean update(Product product);
 }
