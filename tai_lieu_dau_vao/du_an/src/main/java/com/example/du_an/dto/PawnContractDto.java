@@ -130,4 +130,5 @@ public class PawnContractDto {
     public void setProductValueInWords(BigDecimal productValue) {
         this.productValueInWords = NumberToWords.convert(productValue);
     }
+
 }
