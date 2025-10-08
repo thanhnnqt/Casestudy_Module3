@@ -11,15 +11,19 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public boolean create(Product product) {
-        String sql = "INSERT INTO product(product_name, description, pawn_price, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO product(product_name, description, pawn_price, status, image_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = BaseRepository.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getDescription());
             ps.setBigDecimal(3, product.getPawnPrice());
             ps.setString(4, product.getStatus().name());
+            ps.setString(5, product.getImageUrl()); // ✅ thêm dòng này để lưu link ảnh ImgBB
+
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) return false;
+
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     product.setProductId(generatedKeys.getInt(1));
@@ -86,6 +90,8 @@ public class ProductRepository implements IProductRepository {
         product.setProductName(rs.getString("product_name"));
         product.setDescription(rs.getString("description"));
         product.setPawnPrice(rs.getBigDecimal("pawn_price"));
+        product.setImageUrl(rs.getString("image_url")); // ✅ thêm dòng này
+
         String statusStr = rs.getString("status");
         if (statusStr != null) {
             try {
@@ -160,23 +166,20 @@ public class ProductRepository implements IProductRepository {
     }
     @Override
     public boolean update(Product product) {
-        // Thêm product_name vào câu lệnh SQL
-        String sql = "UPDATE product SET product_name = ?, description = ?, pawn_price = ? WHERE product_id = ?";
-
+        String sql = "UPDATE product SET product_name = ?, description = ?, pawn_price = ?, status = ?, image_url = ? WHERE product_id = ?";
         try (Connection conn = BaseRepository.getConnectDB();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            // Thêm tham số cho product_name
             ps.setString(1, product.getProductName());
             ps.setString(2, product.getDescription());
             ps.setBigDecimal(3, product.getPawnPrice());
-            ps.setInt(4, product.getProductId());
-
+            ps.setString(4, product.getStatus().name());
+            ps.setString(5, product.getImageUrl());
+            ps.setInt(6, product.getProductId());
             return ps.executeUpdate() > 0;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
-}
+    }
+
 }
