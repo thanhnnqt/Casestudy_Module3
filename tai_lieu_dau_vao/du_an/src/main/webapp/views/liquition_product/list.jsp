@@ -27,13 +27,19 @@
             transform: translateY(-5px);
             box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
         }
+        .product-image {
+            width: 100%;
+            height: 200px; /* Điều chỉnh chiều cao ảnh cho đồng đều */
+            object-fit: cover; /* Đảm bảo ảnh không bị méo */
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+        }
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
-        <%-- THAY ĐỔI TẠI ĐÂY --%>
         <a class="navbar-brand fw-bold text-danger" href="${pageContext.request.contextPath}/index.jsp">CẦM ĐỒ NHANH</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
@@ -71,6 +77,9 @@
                 <c:forEach var="product" items="${productList}">
                     <div class="col">
                         <div class="card h-100 shadow-sm product-card">
+                            <c:if test="${not empty product.imageUrl}">
+                                <img src="${product.imageUrl}" class="card-img-top product-image" alt="Hình ảnh ${product.productName}">
+                            </c:if>
                             <div class="card-header bg-dark text-white">
                                 <h5 class="card-title mb-0 text-truncate">${product.productName}</h5>
                             </div>
@@ -101,7 +110,6 @@
     </c:choose>
 </div>
 
-<%-- Footer --%>
 <footer class="bg-dark text-white text-center py-3">
     <div class="container">
         <p class="mb-0">&copy; 2025 Tiệm Cầm Đồ Nhanh. All rights reserved.</p>
