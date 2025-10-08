@@ -6,6 +6,10 @@ public class Product {
     public Product(int productId, String productName) {
     }
 
+    public Product(BigDecimal price) {
+        this.pawnPrice = price;
+    }
+
     public enum Status {
         DANG_CAM("Đang cầm"),
         DA_CHUOC("Đã chuộc"),

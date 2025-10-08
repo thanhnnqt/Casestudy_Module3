@@ -18,4 +18,6 @@ public interface IAccountService {
 
     // Lấy tất cả tài khoản
     List<Account> getAllAccounts();
+
+    boolean update(Account account);
 }

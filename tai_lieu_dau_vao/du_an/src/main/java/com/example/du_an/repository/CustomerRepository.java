@@ -1,19 +1,28 @@
 package com.example.du_an.repository;
 
 
-
 import com.example.du_an.entity.Customer;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerRepository {
+public class CustomerRepository implements ICustomerRepository {
+    static final String UPDATE = "UPDATE customer\n" +
+            "SET \n" +
+            "    full_name = ?,\n" +
+            "    citizen_number = ?,\n" +
+            "    phone_number = ?,\n" +
+            "    address = ?,\n" +
+            "    email = ?,\n" +
+            "    dob = ?\n" +
+            "WHERE customer_id = ?;\n";
 
     // Thêm khách hàng mới
     public boolean add(Customer customer) {
         String sql = "INSERT INTO customer (account_id, full_name, citizen_number, phone_number, address, email, dob) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = BaseRepository.getConnectDB();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -175,6 +184,26 @@ public class CustomerRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean update(Customer customer) {
+        Connection connection = BaseRepository.getConnectDB();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement.setString(1, customer.getFullName());
+            preparedStatement.setString(2, customer.getCitizenNumber());
+            preparedStatement.setString(3, customer.getPhoneNumber());
+            preparedStatement.setString(4, customer.getAddress());
+            preparedStatement.setString(5, customer.getEmail());
+            preparedStatement.setDate(6, Date.valueOf(customer.getDob()));
+            preparedStatement.setInt(7, customer.getCustomerId());
+            int row = preparedStatement.executeUpdate();
+            return row == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 
