@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cầm Đồ Nhanh | Giải Pháp Tài Chính Tin Cậy</title>
 
+    <link href="<%= request.getContextPath() %>/bootstrap520/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/fontawesome-free-7.1.0-web/css/all.min.css" />
     <%--    <link href="<%= request.getContextPath() %>/bootstrap520/css/bootstrap.min.css" rel="stylesheet">--%>
     <%--    <link rel="stylesheet" href="<%= request.getContextPath() %>/fontawesome-free-7.1.0-web/css/all.min.css" />--%>
 
@@ -73,8 +75,9 @@
                 <!-- Nếu chưa đăng nhập -->
                 <c:if test="${empty sessionScope.account}">
                     <li class="nav-item">
-                        <a class="btn btn-danger ms-2" href="<%= request.getContextPath() %>/views/login/login.jsp">
-                            <i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập
+                        <a href="<%= request.getContextPath() %>/customer-home"
+                           class="btn btn-light btn-lg shadow-lg fw-bold px-4 text-danger">
+                            <i class="fa-solid fa-user me-2"></i> Đăng nhập
                         </a>
                     </li>
                 </c:if>
@@ -129,8 +132,9 @@
 
                     <!-- Nếu chưa đăng nhập, hiển thị nút đăng nhập -->
                     <c:if test="${empty sessionScope.account}">
-                        <a href="<%= request.getContextPath() %>/views/login/login.jsp" class="btn btn-outline-light btn-lg shadow-lg fw-bold px-4">
-                            <i class="fa-solid fa-right-to-bracket me-2"></i> Đăng Nhập
+                        <a href="<%= request.getContextPath() %>/customer-home"
+                           class="btn btn-light btn-lg shadow-lg fw-bold px-4 text-danger">
+                            <i class="fa-solid fa-user me-2"></i> Đăng nhập
                         </a>
                     </c:if>
 

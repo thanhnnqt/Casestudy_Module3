@@ -1,7 +1,5 @@
 package com.example.du_an.service;
 
-
-
 import com.example.du_an.entity.Product;
 import com.example.du_an.repository.IProductRepository;
 import com.example.du_an.repository.ProductRepository;
@@ -31,11 +29,33 @@ public class ProductService implements IProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
+
+    @Override
+    public boolean updateStatus(int productId, String status) {
+        return productRepository.updateStatus(productId, status);
+    }
+
+
+    @Override
     public boolean updateStatusToLiquidated(int productId) {
         return productRepository.updateStatusToLiquidated(productId);
     }
+
     @Override
     public List<Product> findByStatus(String status) {
         return productRepository.findByStatus(status);
+    }
+
+    @Override
+    public void updateProductStatusForOverdueContracts() {
+        productRepository.updateProductStatusForOverdueContracts();
+    }
+    @Override
+    public boolean update(Product product) {
+        // Có thể thêm các logic kiểm tra dữ liệu ở đây nếu cần
+        if (product == null || product.getProductId() <= 0) {
+            return false;
+        }
+        return productRepository.update(product);
     }
 }

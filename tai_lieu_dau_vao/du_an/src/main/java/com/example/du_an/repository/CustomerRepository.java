@@ -22,7 +22,6 @@ public class CustomerRepository implements ICustomerRepository {
     public boolean add(Customer customer) {
         String sql = "INSERT INTO customer (account_id, full_name, citizen_number, phone_number, address, email, dob) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
         try (Connection conn = BaseRepository.getConnectDB();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -185,6 +184,7 @@ public class CustomerRepository implements ICustomerRepository {
         }
         return null;
     }
+
 
     @Override
     public boolean update(Customer customer) {
