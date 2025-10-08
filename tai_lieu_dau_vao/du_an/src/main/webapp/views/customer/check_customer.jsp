@@ -34,7 +34,7 @@
                 <input type="hidden" name="action" value="check">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-8">
-                        <label class="form-label">Số điện thoại hoặc CCCD *</label>
+                        <label class="form-label">Nhập CCCD hoặc SĐT của khách hàng *</label>
                         <input type="text" name="phoneOrCCCD" class="form-control" required
                                value="<%= phoneOrCCCD %>" placeholder="Nhập số điện thoại hoặc CCCD">
                     </div>
