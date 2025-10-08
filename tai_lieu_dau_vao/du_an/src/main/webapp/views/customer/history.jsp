@@ -39,7 +39,7 @@
         </div>
     </div>
 </nav>
-<a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>
+
 </div>
 <div class="container my-5">
     <div class="text-center mb-5">
