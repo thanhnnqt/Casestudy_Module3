@@ -162,7 +162,7 @@
 </div>
 
 <!-- 🔹 FOOTER -->
-<footer>
+<footer style="position: static;">
     © 2025 Cầm Đồ Nhanh | Thiết kế bởi Nhóm C0625G1
 </footer>
 
