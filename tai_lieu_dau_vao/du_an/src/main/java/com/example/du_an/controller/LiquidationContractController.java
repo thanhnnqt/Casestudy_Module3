@@ -322,7 +322,7 @@ public class LiquidationContractController extends HttpServlet {
             // ======= GHI CHÚ =======
             document.add(new com.itextpdf.text.Paragraph(" "));
             com.itextpdf.text.Paragraph footer = new com.itextpdf.text.Paragraph(
-                    "Tài liệu này được tạo tự động bởi hệ thống quản lý thanh lý tài sản.",
+                    "",
                     new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 10, com.itextpdf.text.Font.ITALIC)
             );
             footer.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
