@@ -19,7 +19,7 @@
 
         /* HEADER */
         header {
-            background: linear-gradient(135deg, #198754, #20c997);
+            background: linear-gradient(135deg, #c62828, #c62828);
             color: white;
             padding: 20px 0;
             box-shadow: 0 3px 10px rgba(0,0,0,0.15);
@@ -35,7 +35,7 @@
             margin-top: 20px;
         }
         .user-info h3 {
-            color: #198754;
+            color: #c62828;
             font-weight: 700;
         }
         .user-info p {
