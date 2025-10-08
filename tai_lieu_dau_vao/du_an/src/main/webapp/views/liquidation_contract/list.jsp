@@ -118,9 +118,9 @@
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
         </div>
-<%--        <div class="col-md-2">--%>
-<%--            <a href="/liquidation-contract?action=create" class="btn btn-success w-100">+ Tạo hợp đồng</a>--%>
-<%--        </div>--%>
+        <div class="col-md-2">
+            <a href="/liquidation-contract?action=create" class="btn btn-success w-100">+ Tạo hợp đồng</a>
+        </div>
     </form>
 
     <!-- 📋 Bảng danh sách -->
