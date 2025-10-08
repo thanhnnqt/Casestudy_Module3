@@ -1,21 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: ASUS
-  Date: 10/4/2025
-  Time: 11:17 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Danh sách khách hàng</title>
     <c:import url="/views/layout/library.jsp"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap520/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/datatables/css/dataTables.bootstrap5.min.css"/>
     <script src="${pageContext.request.contextPath}/jquery/jquery-3.5.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/datatables/js/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/datatables/js/dataTables.bootstrap5.min.js"></script>
+
     <style>
         body {
             font-family: "Poppins", sans-serif;
@@ -23,7 +17,30 @@
             color: #212529;
         }
 
-        /* ==== Bảng sáng ==== */
+        .page-header {
+            background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+        }
+
+        .btn-back {
+            background-color: #ffc107;
+            border: none;
+            color: #212529;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #ffca2c;
+            color: black;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
         table.dataTable {
             border-collapse: separate !important;
             border-spacing: 0 8px;
@@ -59,24 +76,6 @@
             transform: scale(1.02);
         }
 
-        /* Bo góc */
-        table.dataTable tbody tr:first-child td:first-child {
-            border-top-left-radius: 10px;
-        }
-
-        table.dataTable tbody tr:first-child td:last-child {
-            border-top-right-radius: 10px;
-        }
-
-        table.dataTable tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 10px;
-        }
-
-        table.dataTable tbody tr:last-child td:last-child {
-            border-bottom-right-radius: 10px;
-        }
-
-        /* Pagination sáng, phẳng */
         .dataTables_paginate .paginate_button {
             margin: 0 3px;
             font-weight: 500;
@@ -96,16 +95,6 @@
             font-weight: 600;
         }
 
-        .dataTables_paginate .paginate_button:disabled {
-            /*background: #f1f3f5 !important;*/
-            /*color: #adb5bd !important;*/
-            border-color: #f1f3f5 !important;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        /* Length select box */
         .dataTables_length select {
             background: #fff;
             color: #212529;
@@ -123,7 +112,6 @@
             box-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             table.dataTable tbody td,
             table.dataTable thead th {
@@ -143,57 +131,42 @@
             });
         });
     </script>
-
 </head>
-<body>
 
+<body>
 <div class="d-flex w-100">
     <c:import url="/views/layout/sidebar.jsp"/>
-    <div class="col-md-10 table-light">
-        <h3 class="text-md-center text-light">Danh sách khách hàng</h3>
+
+    <div class="col-md-10 table-light p-4">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Danh sách khách hàng</h3>
+            <a href="/views/admin/home.jsp" type="button" class="btn btn-back">
+                ⬅ Quay lại
+            </a>
+        </div>
+
         <!-- Search Box -->
         <form id="searchForm" action="/customer?action=search" method="post" class="d-flex mb-3">
-            <input name="infoSearch" value="${infoSearch}" id="searchInput" class="form-control me-2" type="search" placeholder="Tìm kiếm tên..." aria-label="Tìm kiếm">
-            <input name="citizenNumber" value="${citizenNumber}" id="searchInput" class="form-control me-2" type="search" placeholder="Tìm kiếm căn cước công dân" aria-label="Tìm kiếm">
-
-            <button class="btn btn-primary" type="submit" onclick="searchTable()">
+            <input name="infoSearch" value="${infoSearch}" class="form-control me-2"
+                   type="search" placeholder="Tìm kiếm tên..." aria-label="Tìm kiếm">
+            <input name="citizenNumber" value="${citizenNumber}" class="form-control me-2"
+                   type="search" placeholder="Tìm kiếm căn cước công dân" aria-label="Tìm kiếm">
+            <button class="btn btn-primary" type="submit">
                 <i class="fas fa-search"></i> Tìm
             </button>
         </form>
+
         <table id="tableCustomer" class="table table-striped">
             <thead>
             <tr>
-                <th>
-                    STT
-                </th>
-
-                <th>
-                    Họ và tên
-                </th>
-
-                <th>
-                    Số CCCD
-                </th>
-
-                <th>
-                    Địa chỉ
-                </th>
-
-                <th>
-                    Email
-                </th>
-
-                <th>
-                    Ngày sinh
-                </th>
-
-                <th>
-                    Số điện thoại
-                </th>
-
-                <th>
-                    Tên tài khoản
-                </th>
+                <th>STT</th>
+                <th>Họ và tên</th>
+                <th>Số CCCD</th>
+                <th>Địa chỉ</th>
+                <th>Email</th>
+                <th>Ngày sinh</th>
+                <th>Số điện thoại</th>
+                <th>Tên tài khoản</th>
             </tr>
             </thead>
             <tbody>
@@ -212,8 +185,6 @@
             </tbody>
         </table>
     </div>
-
 </div>
-
 </body>
 </html>
