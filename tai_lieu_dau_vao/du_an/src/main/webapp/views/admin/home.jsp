@@ -135,6 +135,12 @@
                 <p>Xem, tạo và chỉnh sửa danh sách nhân viên cửa hàng</p>
             </a>
 
+            <a href="${pageContext.request.contextPath}/customer?action=list" class="menu-card">
+                <i class="bi bi-journal-text"></i>
+                <h5>Quản lý khách hàng</h5>
+                <p>Xem, tạo và chỉnh sửa danh sách khách hàng</p>
+            </a>
+
             <a href="${pageContext.request.contextPath}/index.jsp" class="menu-card">
                 <i class="bi bi-people"></i>
                 <h5>Quay lại trang chủ</h5>
@@ -164,12 +170,3 @@
 
 </body>
 </html>
-
-    <c:import url="/views/layout/library.jsp"/>
-        <%--  QUẢN LÝ NHÂN VIÊN --%>
-        <a href="${pageContext.request.contextPath}/employees" class="btn btn-primary me-2">
-            👨‍💼 Quản lý Nhân viên
-        </a>
-        <a href="${pageContext.request.contextPath}/customer?action=list" class="btn btn-primary me-2">
-            👨‍💼 Quản lý khách hàng
-        </a>
