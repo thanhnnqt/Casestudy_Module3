@@ -1,25 +1,171 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Home</title>
+    <title>Trang chủ Nhân viên</title>
     <link href="<%= request.getContextPath() %>/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
-    <c:import url="/views/layout/library.jsp"/>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #198754, #20c997);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        /* THÔNG TIN NHÂN VIÊN */
+        .user-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .user-info h3 {
+            color: #198754;
+            font-weight: 700;
+        }
+        .user-info p {
+            color: #6c757d;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        /* MAIN */
+        main {
+            flex: 1;
+            padding: 40px 15px;
+        }
+
+        /* CARD MENU */
+        .card-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        .menu-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .menu-card i {
+            font-size: 2.5rem;
+            color: #198754;
+            margin-bottom: 15px;
+        }
+        .menu-card h5 {
+            font-weight: 600;
+            color: #343a40;
+        }
+        .menu-card p {
+            font-size: 0.95rem;
+            color: #6c757d;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #212529;
+            color: #ccc;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .action-buttons {
+            margin-top: 40px;
+        }
+        .btn {
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
-<body class="bg-light">
-<div class="container py-5 text-center">
-    <h2 class="text-danger mb-3">👑 Chào mừng Admin: <span class="fw-bold">${account.username}</span></h2>
-    <p>Vai trò của bạn: <strong>${account.role}</strong></p>
-    <hr>
+<body>
 
+<!-- Header -->
+<header class="text-center">
+    <div class="container">
+        <h1>💼 Hệ thống Quản lý Cầm đồ</h1>
+    </div>
+</header>
 
-    <div>
-        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-outline-secondary me-2">
-            🏠 Về trang chủ
-        </a>
+<!-- Thông tin nhân viên -->
+<section class="user-info">
+    <div class="container">
+        <h3>Xin chào, ${account.username} 👋</h3>
+        <p>Vai trò: <strong>${account.role}</strong></p>
+    </div>
+</section>
 
+<!-- Main content -->
+<main>
+    <div class="container">
+        <div class="card-menu">
+
+            <a href="${pageContext.request.contextPath}/employees" class="menu-card">
+                <i class="bi bi-journal-text"></i>
+                <h5>Quản lý nhân viên</h5>
+                <p>Xem, tạo và chỉnh sửa danh sách nhân viên cửa hàng</p>
+            </a>
+
+            <a href="${pageContext.request.contextPath}/index.jsp" class="menu-card">
+                <i class="bi bi-people"></i>
+                <h5>Quay lại trang chủ</h5>
+                <p>Quay lại trang chủ hệ thống</p>
+            </a>
+
+            <a href="${pageContext.request.contextPath}/logout" class="menu-card">
+                <i class="bi bi-box-seam"></i>
+                <h5>Đăng xuất</h5>
+                <p>Đăng xuất khỏi hệ thống</p>
+            </a>
+
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p>© 2025 Cầm Đồ Nhanh | Thiết kế bởi Nhóm Dự Án</p>
+    </div>
+</footer>
+
+<!-- Bootstrap & Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<script src="<%= request.getContextPath() %>/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+    <c:import url="/views/layout/library.jsp"/>
         <%--  QUẢN LÝ NHÂN VIÊN --%>
         <a href="${pageContext.request.contextPath}/employees" class="btn btn-primary me-2">
             👨‍💼 Quản lý Nhân viên
@@ -27,11 +173,3 @@
         <a href="${pageContext.request.contextPath}/customer?action=list" class="btn btn-primary me-2">
             👨‍💼 Quản lý khách hàng
         </a>
-
-        <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger">
-            🚪 Đăng xuất
-        </a>
-    </div>
-</div>
-</body>
-</html>
