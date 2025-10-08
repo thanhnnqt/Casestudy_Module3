@@ -21,7 +21,7 @@
         <div class="card-header d-flex justify-content-between align-items-center"
              style="background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); color: white;">
             <span>Kiểm tra và tạo khách hàng</span>
-            <a href="${pageContext.request.contextPath}/pawn-contracts" class="btn btn-light btn-sm">Quay về</a>
+            <a href="${pageContext.request.contextPath}/liquidation-contract" class="btn btn-light btn-sm">Quay về</a>
         </div>
         <div class="card-body">
 
@@ -30,11 +30,11 @@
             <% } %>
 
             <!-- Form kiểm tra khách hàng -->
-            <form action="${pageContext.request.contextPath}/check-customer" method="get" class="mb-4">
+            <form action="${pageContext.request.contextPath}/check-customer-liquidation" method="get" class="mb-4">
                 <input type="hidden" name="action" value="check">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-8">
-                        <label class="form-label">Nhập CCCD hoặc SĐT của khách hàng *</label>
+                        <label class="form-label">Số điện thoại hoặc CCCD *</label>
                         <input type="text" name="phoneOrCCCD" class="form-control" required
                                value="<%= phoneOrCCCD %>" placeholder="Nhập số điện thoại hoặc CCCD">
                     </div>
@@ -56,7 +56,7 @@
                     <li>Email: <%= existingCustomer.getEmail() %></li>
                     <% } %>
                 </ul>
-                <a href="${pageContext.request.contextPath}/pawn-contracts?action=create&customerId=<%= existingCustomer.getCustomerId() %>"
+                <a href="${pageContext.request.contextPath}/liquidation-contract?action=create&customerId=<%= existingCustomer.getCustomerId() %>"
                    class="btn btn-success mt-3">Tạo hợp đồng cho khách hàng này</a>
             </div>
             <% } else { %>
@@ -65,7 +65,7 @@
             </div>
 
             <!-- Form tạo khách hàng mới -->
-            <form action="${pageContext.request.contextPath}/check-customer" method="post">
+            <form action="${pageContext.request.contextPath}/check-customer-liquidation" method="post">
                 <input type="hidden" name="action" value="create">
                 <input type="hidden" name="phoneOrCCCD" value="<%= phoneOrCCCD %>">
 

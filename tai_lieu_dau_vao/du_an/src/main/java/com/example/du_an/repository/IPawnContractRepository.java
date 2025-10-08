@@ -12,8 +12,10 @@ public interface IPawnContractRepository {
     boolean delete(int id);
     boolean update(PawnContract pawnContract);
     PawnContractDto findById(int id);
-    List<PawnContractDto> search(String customerName, String employeeName, String productName);
+    List<PawnContractDto> search(String customerName, String employeeName, String productName, String status);
     PawnContract findByIdProduct(int id);
     List<PawnContractDto> findAll(int offset, int limit);
     int countPawnContract();
+    PawnContractDto getDetail(int pawnContractId);
+
 }

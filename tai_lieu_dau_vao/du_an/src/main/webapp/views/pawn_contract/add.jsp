@@ -1,12 +1,18 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.du_an.entity.Customer" %>
 <%@ page import="com.example.du_an.entity.Employee" %>
 
 <%
+    // Lấy flash message từ session, xóa luôn để chỉ hiển thị 1 lần
+    String success = (String) session.getAttribute("flashSuccess");
+    String error = (String) session.getAttribute("flashError");
+    session.removeAttribute("flashSuccess");
+    session.removeAttribute("flashError");
+
     Customer existingCustomer = (Customer) request.getAttribute("existingCustomer");
     List<Employee> employees = (List<Employee>) request.getAttribute("employees");
-    String error = (String) request.getAttribute("error");
 %>
 
 <link href="${pageContext.request.contextPath}/bootstrap520/css/bootstrap.min.css" rel="stylesheet">
@@ -20,6 +26,10 @@
         </div>
         <div class="card-body">
 
+            <!-- Hiển thị flash message -->
+            <% if (success != null) { %>
+            <div class="alert alert-success"><%= success %></div>
+            <% } %>
             <% if (error != null) { %>
             <div class="alert alert-danger"><%= error %></div>
             <% } %>
@@ -37,8 +47,25 @@
                 </ul>
             </div>
 
-            <!-- Form tạo hợp đồng + sản phẩm -->
+            <!-- Form tạo hợp đồng -->
             <form action="${pageContext.request.contextPath}/pawn-contracts" method="post">
+                <c:if test="${not empty error}">
+                    <div class="alert alert-danger">
+                        <c:choose>
+                            <c:when test="${not empty errors and errors.size() > 1}">
+                                <strong>Vui lòng sửa các lỗi sau:</strong>
+                                <ul>
+                                    <c:forEach var="e" items="${errors}">
+                                        <li>${e}</li>
+                                    </c:forEach>
+                                </ul>
+                            </c:when>
+                            <c:otherwise>
+                                ${error}
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </c:if>
                 <input type="hidden" name="action" value="create">
                 <input type="hidden" name="customerId" value="<%= existingCustomer.getCustomerId() %>">
 
@@ -104,18 +131,22 @@
                 <a href="${pageContext.request.contextPath}/check-customer" class="btn btn-primary mt-2">Kiểm tra khách hàng</a>
             </div>
             <% } %>
-
         </div>
     </div>
 </div>
 
 <script src="${pageContext.request.contextPath}/bootstrap520/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.querySelector('form').addEventListener('submit', function(event) {
-        const employeeId = document.querySelector('select[name="employeeId"]').value;
-        if (!employeeId) {
-            event.preventDefault();
-            alert('Vui lòng chọn một nhân viên.');
-        }
+    // Auto-hide alert sau 5 giây
+    window.addEventListener('DOMContentLoaded', () => {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.transition = 'opacity 0.5s, max-height 0.5s';
+                alert.style.opacity = '0';
+                alert.style.maxHeight = '0';
+                setTimeout(() => alert.remove(), 500);
+            }, 5000000);
+        });
     });
 </script>
