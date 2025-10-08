@@ -6,6 +6,7 @@ import com.example.du_an.entity.Employee;
 import com.example.du_an.entity.PawnContract;
 import com.example.du_an.entity.Product;
 import com.example.du_an.service.*;
+import com.example.du_an.util.NumberToWords;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -301,6 +303,7 @@ public class PawnContractController extends HttpServlet {
             } else {
                 throw new IllegalArgumentException("Không tìm thấy sản phẩm để cập nhật.");
             }
+
             int contractId = parseIntParameter(request.getParameter("id"), "Mã hợp đồng không hợp lệ");
             PawnContract contract = new PawnContract();
             contract.setPawnContractId(contractId);
@@ -311,19 +314,31 @@ public class PawnContractController extends HttpServlet {
             contract.setInterestRate(parseBigDecimalParameter(request.getParameter("interestRate"), "Lãi suất không hợp lệ"));
             contract.setPawnDate(parseLocalDateParameter(request.getParameter("pawnDate"), "Ngày cầm không hợp lệ"));
             contract.setDueDate(parseLocalDateParameter(request.getParameter("dueDate"), "Ngày đến hạn không hợp lệ"));
+
+            // ✅ Xử lý ngày trả: nếu có => cập nhật trạng thái sản phẩm thành "Đã chuộc"
             String returnDateStr = request.getParameter("returnDate");
             if (returnDateStr != null && !returnDateStr.isEmpty()) {
-                contract.setReturnDate(LocalDate.parse(returnDateStr));
+                LocalDate returnDate = LocalDate.parse(returnDateStr);
+                contract.setReturnDate(returnDate);
+
+                // 🔥 Cập nhật trạng thái sản phẩm
+                product.setStatus(Product.Status.DA_CHUOC);
+                productService.update(product);
             }
+
+            // ✅ Cập nhật hợp đồng
             pawnContractService.update(contract);
+
             request.getSession().setAttribute("flashSuccess", "Cập nhật hợp đồng thành công!");
             response.sendRedirect(request.getContextPath() + "/pawn-contracts");
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Lỗi khi cập nhật: " + e.getMessage());
             showEditForm(request, response);
         }
     }
+
 
     private void deletePawnContract(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
@@ -360,18 +375,44 @@ public class PawnContractController extends HttpServlet {
         }
     }
 
-    private void showDetailPawnContract(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showDetailPawnContract(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             PawnContractDto contract = pawnContractService.getDetail(id);
+
+            if (contract != null && contract.getPawnPrice() != null && contract.getInterestRate() != null) {
+                LocalDate startDate = contract.getPawnDate();
+                LocalDate endDate = (contract.getReturnDate() != null) ? contract.getReturnDate() : contract.getDueDate();
+
+                if (startDate != null && endDate != null && !endDate.isBefore(startDate)) {
+                    long monthsBetween = ChronoUnit.MONTHS.between(startDate, endDate);
+                    if (monthsBetween == 0) monthsBetween = 1; // Ít nhất 1 tháng
+
+                    BigDecimal interestAmount = contract.getPawnPrice()
+                            .multiply(contract.getInterestRate())
+                            .divide(BigDecimal.valueOf(100))
+                            .multiply(BigDecimal.valueOf(monthsBetween));
+
+                    BigDecimal totalPayment = contract.getPawnPrice().add(interestAmount);
+
+                    // ✅ Gửi cả số tiền số và bằng chữ sang JSP
+                    request.setAttribute("totalPayment", totalPayment);
+                    request.setAttribute("totalPaymentInWords", NumberToWords.convert(totalPayment));
+                }
+            }
+
             request.setAttribute("contract", contract);
             request.getRequestDispatcher("views/pawn_contract/detail.jsp").forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Không tìm thấy chi tiết hợp đồng.");
             request.getRequestDispatcher("views/pawn_contract/detail.jsp").forward(request, response);
         }
     }
+
+
 
     private int parseIntParameter(String value, String errorMessage) {
         if (value == null || value.trim().isEmpty()) throw new IllegalArgumentException(errorMessage);
