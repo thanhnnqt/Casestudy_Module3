@@ -17,7 +17,7 @@ public class LiquidationContractRepository implements ILiquidationContractReposi
     private static final String INSERT = "insert into liquidation_contract " +
             "(liquidation_date, price, customer_id, employee_id, product_id) values(?, ?, ?, ?, ?)";
     private static final String DELETE = "delete from liquidation_contract where liquidation_contract_id = ?";
-    private static final String FIND_PRODUCT = "select product_id, product_name from product where status = 'Thanh lý'";
+    private static final String FIND_PRODUCT = "select product_id, product_name from product where status = 'Thanh_ly'";
     private static final String FIND_PRODUCT_PRICE = "select pawn_price from product";
 
     @Override

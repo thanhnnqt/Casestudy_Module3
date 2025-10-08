@@ -10,6 +10,7 @@ public class Account {
     private String passwordHash;
     private Role role;
     private int employeeId;
+    // Constructor có 3 tham số
     public Account(String username, String passwordHash, Role role) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username không được để trống");
@@ -24,7 +25,8 @@ public class Account {
             throw new IllegalArgumentException("Vai trò không được để trống");
         }
         this.username = username.trim();
-        this.passwordHash = BCrypt.hashpw(passwordHash.trim(), BCrypt.gensalt());
+        // Bỏ qua hashing và lưu mật khẩu thường
+        this.passwordHash = passwordHash.trim();
         this.role = role;
     }
 
