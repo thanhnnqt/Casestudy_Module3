@@ -12,7 +12,7 @@ public class LiquidationProductRepository implements ILiquidationProductReposito
             "SELECT p.product_name, p.description, p.pawn_price AS liquidation_price, lc.liquidation_date " + // Giữ lại lc.liquidation_date
                     "FROM product p " +
                     "JOIN liquidation_contract lc ON p.product_id = lc.product_id " +
-                    "WHERE p.status = 'Thanh lý'";
+                    "WHERE p.status = 'Thanh_ly'";
 
     @Override
     public List<LiquidationProductDto> findAllLiquidationProducts() {
