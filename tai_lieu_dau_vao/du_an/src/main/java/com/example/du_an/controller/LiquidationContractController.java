@@ -334,6 +334,4 @@ public class LiquidationContractController extends HttpServlet {
             e.printStackTrace();
         }
     }
-
-
 }
