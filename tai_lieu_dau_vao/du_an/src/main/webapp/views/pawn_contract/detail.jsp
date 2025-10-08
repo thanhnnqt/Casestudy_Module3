@@ -12,60 +12,136 @@
             color: #000;
             background: #f0f2f5;
         }
+
         .contract-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 40px 50px;
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 50px 60px;
             background: #fff;
-            border-radius: 10px;
-            border: 3px solid #1a73e8;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            border: 2px solid #1a73e8;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
             position: relative;
         }
+
         .contract-container::before {
             content: "C0625G1";
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 80px;
-            color: rgba(128, 128, 128, 0.1);
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-size: 100px;
+            color: rgba(128, 128, 128, 0.08);
             z-index: 0;
             pointer-events: none;
         }
+
         .contract-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             position: relative;
             z-index: 1;
         }
-        .contract-header h2 { color: #1a73e8; margin-bottom: 5px; }
-        .contract-section { margin-bottom: 20px; position: relative; z-index: 1; }
+
+        .contract-header h2 {
+            color: #1a73e8;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .contract-section {
+            background: #fafbff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
         .section-title {
             font-weight: bold;
             color: #1a73e8;
-            border-bottom: 1px solid #ccc;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
+            border-bottom: 2px solid #1a73e8;
+            margin-bottom: 12px;
+            padding-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .contract-label { width: 200px; font-weight: bold; display: inline-block; vertical-align: top; color: #333; }
-        .contract-value { display: inline-block; }
-        .signature-section { display: flex; justify-content: space-between; margin-top: 50px; }
-        .signature { text-align: center; width: 45%; }
-        .signature-line { border-top: 1px solid #000; margin-top: 60px; }
-        .footer { text-align: center; font-size: 12px; color: #888; margin-top: 30px; position: relative; z-index: 1; }
+
+        .contract-label {
+            width: 220px;
+            font-weight: bold;
+            display: inline-block;
+            vertical-align: top;
+            color: #333;
+        }
+
+        .contract-value {
+            display: inline-block;
+            color: #000;
+        }
+
+        /* Đồng bộ màu thanh toán với các phần khác */
+        .payment-section {
+            background: #fafbff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .signature {
+            width: 45%;
+        }
+
+        .signature p {
+            margin-bottom: 60px;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 60px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
         .back-button {
             display: inline-block;
-            margin: 20px auto;
-            padding: 8px 15px;
+            margin: 25px auto;
+            padding: 8px 16px;
             background-color: #1a73e8;
             color: #fff;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-weight: bold;
         }
-        .back-button:hover { background-color: #155ab6; color: #fff; }
-        @media print { body { background: #fff; } .contract-container { box-shadow: none; } a.back-button { display: none; } }
+
+        .back-button:hover {
+            background-color: #155ab6;
+            color: #fff;
+        }
+
+        @media print {
+            body { background: #fff; }
+            .contract-container { box-shadow: none; border: none; }
+            a.back-button { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -95,16 +171,10 @@
         <div class="section-title">Thông tin sản phẩm</div>
         <div><span class="contract-label">Tên sản phẩm:</span> <span class="contract-value">${contract.productName}</span></div>
         <div><span class="contract-label">Mô tả:</span> <span class="contract-value">${contract.productDescription}</span></div>
-        <div>
-            <span class="contract-label">Định giá:</span>
-            <span class="contract-value">
-                <fmt:formatNumber value="${contract.productValue}" type="number" groupingUsed="true"/>₫
-            </span>
+        <div><span class="contract-label">Định giá:</span>
+            <span class="contract-value"><fmt:formatNumber value="${contract.productValue}" type="number" groupingUsed="true"/>₫</span>
         </div>
-        <div>
-            <span class="contract-label">Bằng chữ:</span>
-            <span class="contract-value">${contract.productValueInWords}</span>
-        </div>
+        <div><span class="contract-label">Bằng chữ:</span> <span class="contract-value">${contract.productValueInWords}</span></div>
     </div>
 
     <div class="contract-section">
@@ -112,60 +182,60 @@
         <div><span class="contract-label">Ngày cầm:</span> <span class="contract-value">${contract.pawnDateFormatted}</span></div>
         <div><span class="contract-label">Ngày đáo hạn:</span> <span class="contract-value">${contract.dueDateFormatted}</span></div>
         <div><span class="contract-label">Ngày chuộc:</span> <span class="contract-value">${contract.returnDateFormatted}</span></div>
+        <div><span class="contract-label">Số tiền cầm:</span>
+            <span class="contract-value"><fmt:formatNumber value="${contract.pawnPrice}" type="number" groupingUsed="true"/>₫</span>
+        </div>
+        <div><span class="contract-label">Bằng chữ:</span> <span class="contract-value">${contract.pawnPriceInWords}</span></div>
+        <div><span class="contract-label">Lãi suất:</span> <span class="contract-value">${contract.interestRate}%</span></div>
+    </div>
+
+    <!-- 🔹 Phần thanh toán - đồng màu -->
+    <div class="payment-section">
+        <div class="section-title">Thông tin thanh toán</div>
         <div>
-            <span class="contract-label">Số tiền cầm:</span>
-            <span class="contract-value">
-                <fmt:formatNumber value="${contract.pawnPrice}" type="number" groupingUsed="true"/>₫
-            </span>
+            <span class="contract-label">Tổng tiền khách phải thanh toán:</span>
+            <span class="contract-value fw-bold text-dark">
+            <fmt:formatNumber value="${totalPayment}" type="number" groupingUsed="true"/>₫
+        </span>
         </div>
         <div>
             <span class="contract-label">Bằng chữ:</span>
-            <span class="contract-value">${contract.pawnPriceInWords}</span>
+            <span class="contract-value text-dark">${totalPaymentInWords}</span>
         </div>
-        <div><span class="contract-label">Lãi suất:</span> <span class="contract-value">${contract.interestRate}%</span></div>
     </div>
 
     <div class="signature-section">
         <div class="signature">
-            <p>Khách hàng</p>
+            <p><strong>Khách hàng</strong></p>
             <div class="signature-line"></div>
         </div>
         <div class="signature">
-            <p>Nhân viên</p>
+            <p><strong>Nhân viên</strong></p>
             <div class="signature-line"></div>
         </div>
     </div>
 
-    <div class="footer">C0625G1</div>
+    <div class="footer">© C0625G1 - Cầm đồ uy tín số 1 CodeGym</div>
 </div>
+
+<a href="#" id="downloadPdf" class="back-button">⬇️ Tải file PDF</a>
 
 <script src="${pageContext.request.contextPath}/bootstrap520/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-<a href="#" id="downloadPdf" class="back-button">⬇️ Tải file PDF</a>
-
 <script>
     document.getElementById("downloadPdf").addEventListener("click", function (e) {
         e.preventDefault();
-
         const element = document.querySelector(".contract-container");
         const opt = {
             margin: 0.5,
             filename: 'hop_dong_cam_do_${contract.pawnContractId}.pdf',
             image: { type: 'jpeg', quality: 1 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true, // nếu có ảnh từ ImgBB
-                scrollY: 0,
-                windowWidth: document.body.scrollWidth,
-                windowHeight: element.scrollHeight
-            },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // ✅ chia trang thông minh
+            html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
     });
 </script>
-
 </body>
 </html>

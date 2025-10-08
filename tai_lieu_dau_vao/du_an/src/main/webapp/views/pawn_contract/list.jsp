@@ -35,6 +35,43 @@
       right: 20px;
       z-index: 2000;
     }
+
+    table.table {
+      border-collapse: collapse !important;
+    }
+
+    /* ✅ Giữ bảng đều hàng, không giãn khi nhiều nút */
+    .fixed-table td, .fixed-table th {
+      padding: 10px 12px !important;
+      vertical-align: middle !important;
+      font-size: 15px !important;
+      line-height: 1.3 !important;
+      white-space: nowrap !important;
+    }
+
+    .fixed-table td button,
+    .fixed-table td a {
+      margin: 2px 0 !important;
+    }
+
+    .fixed-table tbody tr {
+      height: 58px !important;
+    }
+
+    .btn-action {
+      padding: 4px 8px !important;
+      font-size: 13px !important;
+      transition: transform 0.2s;
+    }
+    .btn-action:hover {
+      transform: scale(1.1);
+    }
+
+    .badge-active { background: linear-gradient(90deg, #36D1DC, #5B86E5); color:white; }
+    .badge-closed { background: linear-gradient(90deg, #43e97b, #38f9d7); color:white; }
+    .badge-liquidated { background: linear-gradient(90deg, #f85032, #e73827); color:white; }
+    .badge-liquidatable { background: linear-gradient(90deg, #FFD700, #FFA500); color: black; }
+    .badge-liquidating { background: linear-gradient(90deg, #ff6a00, #ee0979); color:white; }
   </style>
 </head>
 <body class="container mt-5">
@@ -101,8 +138,9 @@
 
 <c:choose>
   <c:when test="${not empty pawnContracts}">
-    <table class="table table-bordered table-striped table-hover align-middle text-center">
-      <thead class="table-dark">
+    <table class="table table-bordered table-striped table-hover text-center fixed-table">
+
+    <thead class="table-dark">
       <tr>
         <th>STT</th>
         <th>Khách hàng</th>
@@ -234,33 +272,7 @@
 
 <script>
   $(document).ready(function () {
-    $('#tableProduct').DataTable({
-      "dom": 'lrtip',
-      "lengthChange": false,
-      "pageLength": 5,
-      "language": {
-        "decimal": "",
-        "emptyTable": "Không có dữ liệu trong bảng",
-        "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
-        "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
-        "infoFiltered": "(lọc từ tổng số _MAX_ mục)",
-        "lengthMenu": "Hiển thị _MENU_ mục",
-        "loadingRecords": "Đang tải...",
-        "processing": "Đang xử lý...",
-        "search": "Tìm kiếm:",
-        "zeroRecords": "Không tìm thấy kết quả phù hợp",
-        "paginate": {
-          "first": "Đầu",
-          "last": "Cuối",
-          "next": "›",
-          "previous": "‹"
-        },
-        "aria": {
-          "sortAscending": ": sắp xếp tăng dần",
-          "sortDescending": ": sắp xếp giảm dần"
-        }
-      }
-    });
+
 
     // ✅ Tự động ẩn toast sau 3 giây
     setTimeout(() => {
