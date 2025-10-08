@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.du_an.entity.Customer" %>
 <%@ page import="com.example.du_an.entity.Employee" %>
@@ -26,13 +26,12 @@
         </div>
         <div class="card-body">
 
-            <!-- Hiển thị flash message -->
             <% if (success != null) { %>
             <div class="alert alert-success"><%= success %></div>
             <% } %>
-            <% if (error != null) { %>
-            <div class="alert alert-danger"><%= error %></div>
-            <% } %>
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger">${error}</div>
+            </c:if>
 
             <% if (existingCustomer != null) { %>
             <div class="alert alert-info">
@@ -41,31 +40,11 @@
                     <li>Họ tên: <%= existingCustomer.getFullName() %></li>
                     <li>CCCD: <%= existingCustomer.getCitizenNumber() %></li>
                     <li>SĐT: <%= existingCustomer.getPhoneNumber() %></li>
-                    <% if(existingCustomer.getEmail() != null) { %>
-                    <li>Email: <%= existingCustomer.getEmail() %></li>
-                    <% } %>
                 </ul>
             </div>
 
-            <!-- Form tạo hợp đồng -->
-            <form action="${pageContext.request.contextPath}/pawn-contracts" method="post">
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger">
-                        <c:choose>
-                            <c:when test="${not empty errors and errors.size() > 1}">
-                                <strong>Vui lòng sửa các lỗi sau:</strong>
-                                <ul>
-                                    <c:forEach var="e" items="${errors}">
-                                        <li>${e}</li>
-                                    </c:forEach>
-                                </ul>
-                            </c:when>
-                            <c:otherwise>
-                                ${error}
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </c:if>
+            <%-- ✅ 1. Thêm enctype="multipart/form-data" --%>
+            <form action="${pageContext.request.contextPath}/pawn-contracts" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="create">
                 <input type="hidden" name="customerId" value="<%= existingCustomer.getCustomerId() %>">
 
@@ -74,16 +53,22 @@
                     <div class="col-md-6">
                         <label class="form-label">Tên sản phẩm *</label>
                         <input type="text" name="productName" class="form-control" required placeholder="Tên sản phẩm"
-                               value="<%= request.getParameter("productName") != null ? request.getParameter("productName") : "" %>">
+                               value="${not empty productName ? productName : ''}">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Giá trị sản phẩm *</label>
-                        <input type="number" name="productValue" class="form-control" required step="0.01" placeholder="Giá trị sản phẩm"
-                               value="<%= request.getParameter("productValue") != null ? request.getParameter("productValue") : "" %>">
+                        <label class="form-label">Giá trị định giá *</label>
+                        <input type="number" name="productValue" class="form-control" required step="1000" placeholder="Giá trị sản phẩm"
+                               value="${not empty productValue ? productValue : ''}">
                     </div>
                     <div class="col-12">
                         <label class="form-label">Mô tả sản phẩm</label>
-                        <textarea name="description" class="form-control" rows="2" placeholder="Mô tả sản phẩm"><%= request.getParameter("description") != null ? request.getParameter("description") : "" %></textarea>
+                        <textarea name="description" class="form-control" rows="2" placeholder="Mô tả sản phẩm">${not empty description ? description : ''}</textarea>
+                    </div>
+
+                    <%-- ✅ 2. Thêm ô input cho file ảnh --%>
+                    <div class="col-12">
+                        <label for="productImage" class="form-label">Hình ảnh sản phẩm</label>
+                        <input class="form-control" type="file" id="productImage" name="productImage" accept="image/*">
                     </div>
                 </div>
 
@@ -92,34 +77,33 @@
                     <div class="col-md-6">
                         <label class="form-label">Nhân viên *</label>
                         <select name="employeeId" class="form-select" required>
-                            <option value="" disabled>-- Chọn nhân viên --</option>
-                            <% for (Employee emp : employees) { %>
-                            <option value="<%= emp.getEmployeeId() %>"
-                                    <%= request.getParameter("employeeId") != null && request.getParameter("employeeId").equals(String.valueOf(emp.getEmployeeId())) ? "selected" : "" %>>
-                                <%= emp.getFullName() %>
-                            </option>
-                            <% } %>
+                            <option value="" disabled selected>-- Chọn nhân viên --</option>
+                            <c:forEach var="emp" items="${employees}">
+                                <option value="${emp.employeeId}" ${emp.employeeId == employeeId ? 'selected' : ''}>
+                                        ${emp.fullName}
+                                </option>
+                            </c:forEach>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Số tiền khách muốn cầm *</label>
-                        <input type="number" name="pawnAmount" class="form-control" required step="0.01" placeholder="Số tiền cầm"
-                               value="<%= request.getParameter("pawnAmount") != null ? request.getParameter("pawnAmount") : "" %>">
+                        <input type="number" name="pawnAmount" class="form-control" required step="1000" placeholder="Số tiền cầm"
+                               value="${not empty pawnAmount ? pawnAmount : ''}">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Lãi suất (%)</label>
-                        <input type="number" name="interestRate" class="form-control" step="0.01" placeholder="Lãi suất"
-                               value="<%= request.getParameter("interestRate") != null ? request.getParameter("interestRate") : "" %>">
+                        <label class="form-label">Lãi suất (%) *</label>
+                        <input type="number" name="interestRate" class="form-control" required step="0.01" placeholder="Lãi suất"
+                               value="${not empty interestRate ? interestRate : ''}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Ngày cầm *</label>
                         <input type="date" name="pawnDate" class="form-control" required
-                               value="<%= request.getParameter("pawnDate") != null ? request.getParameter("pawnDate") : "" %>">
+                               value="${not empty pawnDate ? pawnDate : ''}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Ngày đến hạn *</label>
                         <input type="date" name="dueDate" class="form-control" required
-                               value="<%= request.getParameter("dueDate") != null ? request.getParameter("dueDate") : "" %>">
+                               value="${not empty dueDate ? dueDate : ''}">
                     </div>
                 </div>
 
@@ -137,7 +121,7 @@
 
 <script src="${pageContext.request.contextPath}/bootstrap520/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Auto-hide alert sau 5 giây
+    // Giữ nguyên script của bạn
     window.addEventListener('DOMContentLoaded', () => {
         const alerts = document.querySelectorAll('.alert');
         alerts.forEach(alert => {

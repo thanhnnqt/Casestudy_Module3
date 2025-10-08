@@ -7,17 +7,32 @@ import com.example.du_an.entity.PawnContract;
 import com.example.du_an.entity.Product;
 import com.example.du_an.service.*;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 @WebServlet(name = "PawnContractController", urlPatterns = "/pawn-contracts")
+@MultipartConfig
 public class PawnContractController extends HttpServlet {
 
     private final IPawnContractService pawnContractService = new PawnContractService();
@@ -73,15 +88,134 @@ public class PawnContractController extends HttpServlet {
         }
     }
 
-    private void listPawnContracts(HttpServletRequest request, HttpServletResponse response)
+    // Trong file PawnContractController.java
+    private void createPawnContract(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        productService.updateProductStatusForOverdueContracts();
 
+        List<String> errors = new ArrayList<>();
+        String customerIdStr = request.getParameter("customerId");
+        String employeeIdStr = request.getParameter("employeeId");
+        String productName = request.getParameter("productName");
+        String description = request.getParameter("description");
+        String productValueStr = request.getParameter("productValue");
+        String pawnAmountStr = request.getParameter("pawnAmount");
+        String interestRateStr = request.getParameter("interestRate");
+        String pawnDateStr = request.getParameter("pawnDate");
+        String dueDateStr = request.getParameter("dueDate");
+
+        try {
+            int employeeId = parseIntParameter(employeeIdStr, "Mã nhân viên không hợp lệ");
+            int customerId = parseIntParameter(customerIdStr, "Mã khách hàng không hợp lệ");
+            BigDecimal productValue = parseBigDecimalParameter(productValueStr, "Giá trị định giá không hợp lệ");
+            BigDecimal pawnAmount = parseBigDecimalParameter(pawnAmountStr, "Số tiền cầm không hợp lệ");
+            LocalDate pawnDate = parseLocalDateParameter(pawnDateStr, "Ngày cầm không hợp lệ");
+            LocalDate dueDate = parseLocalDateParameter(dueDateStr, "Ngày đến hạn không hợp lệ");
+
+            // ✅ Validate dữ liệu
+            if (productName == null || productName.trim().isEmpty()) {
+                errors.add("Tên sản phẩm không được để trống.");
+            }
+            if (pawnAmount.compareTo(productValue) > 0) {
+                errors.add("Số tiền cầm không được lớn hơn giá trị định giá của sản phẩm.");
+            }
+            if (pawnAmount.compareTo(BigDecimal.ZERO) <= 0) {
+                errors.add("Số tiền cầm phải lớn hơn 0.");
+            }
+            if (dueDate.isBefore(pawnDate)) {
+                errors.add("Ngày đến hạn phải sau ngày cầm đồ.");
+            }
+
+            if (!errors.isEmpty()) {
+                throw new IllegalArgumentException(String.join("<br>", errors));
+            }
+
+            // ✅ Upload ảnh lên ImgBB
+            String imageUrl = null;
+            Part filePart = request.getPart("productImage");
+            if (filePart != null && filePart.getSize() > 0) {
+                String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                String apiKey = "2ee83bdf97e704463f4a9fa268b24bb6";
+
+                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                    HttpPost uploadFile = new HttpPost("https://api.imgbb.com/1/upload?key=" + apiKey);
+
+                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                    builder.addBinaryBody("image", filePart.getInputStream(), ContentType.DEFAULT_BINARY, originalFileName);
+                    HttpEntity multipart = builder.build();
+                    uploadFile.setEntity(multipart);
+
+                    imageUrl = httpClient.execute(uploadFile, httpResponse -> {
+                        HttpEntity responseEntity = httpResponse.getEntity();
+                        String responseString = EntityUtils.toString(responseEntity);
+
+                        System.out.println("ImgBB response: " + responseString);
+
+                        Gson gson = new Gson();
+                        JsonObject jsonObject = gson.fromJson(responseString, JsonObject.class);
+                        if (jsonObject.get("success").getAsBoolean()) {
+                            return jsonObject.getAsJsonObject("data").get("url").getAsString();
+                        } else {
+                            throw new IOException("ImgBB upload failed: " +
+                                    jsonObject.getAsJsonObject("error").get("message").getAsString());
+                        }
+                    });
+
+                    System.out.println("Uploaded to ImgBB: " + imageUrl);
+                }
+            }
+
+            // ✅ Tạo product và lưu DB (đã có imageUrl)
+            Product product = new Product();
+            product.setProductName(productName.trim());
+            product.setDescription(description != null ? description.trim() : null);
+            product.setPawnPrice(productValue);
+            product.setStatus(Product.Status.DANG_CAM);
+            product.setImageUrl(imageUrl); // 💾 link ảnh ImgBB
+
+            boolean created = productService.create(product);
+            if (!created || product.getProductId() <= 0) {
+                throw new RuntimeException("Không thể tạo sản phẩm mới.");
+            }
+
+            // ✅ Tạo hợp đồng cầm đồ
+            PawnContract contract = new PawnContract(
+                    customerId,
+                    employeeId,
+                    product.getProductId(),
+                    pawnDate,
+                    pawnAmount,
+                    parseBigDecimalParameter(interestRateStr, "Lãi suất không hợp lệ"),
+                    dueDate,
+                    null
+            );
+            pawnContractService.add(contract);
+
+            request.getSession().setAttribute("flashSuccess", "🎉 Tạo hợp đồng thành công!");
+            response.sendRedirect(request.getContextPath() + "/pawn-contracts");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Lỗi khi thêm hợp đồng: " + e.getMessage());
+            request.setAttribute("customerId", customerIdStr);
+            request.setAttribute("employeeId", employeeIdStr);
+            request.setAttribute("productName", productName);
+            request.setAttribute("description", description);
+            request.setAttribute("productValue", productValueStr);
+            request.setAttribute("pawnAmount", pawnAmountStr);
+            request.setAttribute("interestRate", interestRateStr);
+            request.setAttribute("pawnDate", pawnDateStr);
+            request.setAttribute("dueDate", dueDateStr);
+            showCreateForm(request, response);
+        }
+    }
+
+    // --- CÁC PHƯƠNG THỨC CÒN LẠI GIỮ NGUYÊN 100% NHƯ CỦA BẠN ---
+    private void listPawnContracts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        productService.updateProductStatusForOverdueContracts();
         String customerName = request.getParameter("customerName");
         String employeeName = request.getParameter("employeeName");
         String productName = request.getParameter("productName");
         String status = request.getParameter("status");
-
         int page = 1;
         int recordsPerPage = 5;
         String pageParam = request.getParameter("page");
@@ -93,15 +227,9 @@ public class PawnContractController extends HttpServlet {
                 page = 1;
             }
         }
-
         List<PawnContractDto> contracts;
         int totalRecords;
-
-        boolean hasSearch = (customerName != null && !customerName.trim().isEmpty()) ||
-                (employeeName != null && !employeeName.trim().isEmpty()) ||
-                (productName != null && !productName.trim().isEmpty()) ||
-                (status != null && !status.trim().isEmpty());
-
+        boolean hasSearch = (customerName != null && !customerName.trim().isEmpty()) || (employeeName != null && !employeeName.trim().isEmpty()) || (productName != null && !productName.trim().isEmpty()) || (status != null && !status.trim().isEmpty());
         if (hasSearch) {
             contracts = pawnContractService.search(customerName, employeeName, productName, status);
             totalRecords = contracts.size();
@@ -110,9 +238,7 @@ public class PawnContractController extends HttpServlet {
             int offset = (page - 1) * recordsPerPage;
             contracts = pawnContractService.findAll(offset, recordsPerPage);
         }
-
         int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
-
         request.setAttribute("pawnContracts", contracts);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
@@ -120,15 +246,12 @@ public class PawnContractController extends HttpServlet {
         request.setAttribute("employeeName", employeeName);
         request.setAttribute("productName", productName);
         request.setAttribute("status", status);
-
         request.getRequestDispatcher("views/pawn_contract/list.jsp").forward(request, response);
     }
 
-    private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Employee> employees = employeeService.getAllEmployees();
         request.setAttribute("employees", employees);
-
         String customerIdStr = request.getParameter("customerId");
         if (customerIdStr != null && !customerIdStr.trim().isEmpty()) {
             try {
@@ -143,144 +266,34 @@ public class PawnContractController extends HttpServlet {
                 request.setAttribute("error", "Mã khách hàng không hợp lệ");
             }
         }
-
         request.getRequestDispatcher("views/pawn_contract/add.jsp").forward(request, response);
     }
 
-    // Trong file PawnContractController.java
-    private void createPawnContract(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        List<String> errors = new ArrayList<>();
-        // Lấy trước các tham số để có thể gửi lại form nếu lỗi
-        String customerIdStr = request.getParameter("customerId");
-        String employeeIdStr = request.getParameter("employeeId");
-        String productName = request.getParameter("productName");
-        String description = request.getParameter("description");
-        String productValueStr = request.getParameter("productValue");
-        String pawnAmountStr = request.getParameter("pawnAmount");
-        String interestRateStr = request.getParameter("interestRate");
-        String pawnDateStr = request.getParameter("pawnDate");
-        String dueDateStr = request.getParameter("dueDate");
-
-        try {
-            // --- Bắt đầu Parse và Validate ---
-            int employeeId = parseIntParameter(employeeIdStr, "Mã nhân viên không hợp lệ");
-            int customerId = parseIntParameter(customerIdStr, "Mã khách hàng không hợp lệ");
-            BigDecimal productValue = parseBigDecimalParameter(productValueStr, "Giá trị định giá không hợp lệ");
-            BigDecimal pawnAmount = parseBigDecimalParameter(pawnAmountStr, "Số tiền cầm không hợp lệ");
-            LocalDate pawnDate = parseLocalDateParameter(pawnDateStr, "Ngày cầm không hợp lệ");
-            LocalDate dueDate = parseLocalDateParameter(dueDateStr, "Ngày đến hạn không hợp lệ");
-
-            if (productName == null || productName.trim().isEmpty()) {
-                errors.add("Tên sản phẩm không được để trống.");
-            }
-            if (pawnAmount.compareTo(productValue) > 0) {
-                errors.add("Số tiền cầm không được lớn hơn giá trị định giá của sản phẩm.");
-            }
-            if (pawnAmount.compareTo(BigDecimal.ZERO) <= 0) {
-                errors.add("Số tiền cầm phải lớn hơn 0.");
-            }
-            if (dueDate.isBefore(pawnDate)) {
-                errors.add("Ngày đến hạn phải sau ngày cầm đồ.");
-            }
-
-            // --- Kiểm tra nếu có lỗi thì quay lại form ---
-            if (!errors.isEmpty()) {
-                throw new IllegalArgumentException(errors.get(0)); // Ném lỗi đầu tiên để catch block xử lý
-            }
-
-            // --- Nếu không có lỗi, tiến hành tạo mới ---
-            Customer customer = customerService.findById(customerId);
-            if (customer == null) {
-                throw new IllegalArgumentException("Khách hàng không tồn tại với ID: " + customerId);
-            }
-
-            // 1. Tạo sản phẩm với giá trị định giá
-            Product product = new Product();
-            product.setProductName(productName.trim());
-            product.setDescription(description != null ? description.trim() : null);
-            product.setPawnPrice(productValue); // Lưu giá trị định giá
-            product.setStatus(Product.Status.DANG_CAM);
-            productService.create(product);
-
-            if (product.getProductId() <= 0) {
-                throw new RuntimeException("Không thể tạo sản phẩm mới.");
-            }
-
-            // 2. Tạo hợp đồng với số tiền cầm
-            PawnContract contract = new PawnContract();
-            contract.setCustomerId(customerId);
-            contract.setEmployeeId(employeeId);
-            contract.setProductId(product.getProductId());
-            contract.setPawnDate(pawnDate);
-            contract.setDueDate(dueDate);
-            contract.setPawnPrice(pawnAmount); // Lưu số tiền cầm
-            contract.setInterestRate(parseBigDecimalParameter(interestRateStr, "Lãi suất không hợp lệ"));
-
-            pawnContractService.add(contract);
-
-            request.getSession().setAttribute("flashSuccess", "🎉 Tạo hợp đồng thành công!");
-            response.sendRedirect(request.getContextPath() + "/pawn-contracts?action=create");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Nếu có lỗi, gửi lại toàn bộ dữ liệu người dùng đã nhập
-            request.setAttribute("error", e.getMessage());
-            request.setAttribute("errors", errors); // Gửi cả danh sách lỗi chi tiết
-
-            request.setAttribute("customerId", customerIdStr);
-            request.setAttribute("employeeId", employeeIdStr);
-            request.setAttribute("productName", productName);
-            request.setAttribute("description", description);
-            request.setAttribute("productValue", productValueStr);
-            request.setAttribute("pawnAmount", pawnAmountStr);
-            request.setAttribute("interestRate", interestRateStr);
-            request.setAttribute("pawnDate", pawnDateStr);
-            request.setAttribute("dueDate", dueDateStr);
-
-            showCreateForm(request, response);
-        }
-    }
-    // Trong file: PawnContractController.java
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-
-            // Lấy thông tin hợp đồng chính (đã có tên khách hàng, nhân viên, sản phẩm)
             PawnContractDto contract = pawnContractService.findById(id);
             if (contract == null) {
                 response.sendRedirect(request.getContextPath() + "/pawn-contracts");
                 return;
             }
-
-            // Lấy thông tin chi tiết của sản phẩm để sửa mô tả, giá trị...
             Product product = productService.findById(contract.getProductId());
-
-            // Lấy danh sách nhân viên để làm dropdown
             List<Employee> employees = employeeService.getAllEmployees();
-
-            // Gửi tất cả dữ liệu cần thiết qua JSP
             request.setAttribute("contract", contract);
             request.setAttribute("product", product);
             request.setAttribute("employees", employees);
-
             request.getRequestDispatcher("views/pawn_contract/update.jsp").forward(request, response);
-
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/pawn-contracts");
         }
     }
-    private void updatePawnContract(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+
+    private void updatePawnContract(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // --- Cập nhật thông tin sản phẩm ---
             int productId = parseIntParameter(request.getParameter("productId"), "Mã sản phẩm không hợp lệ");
             Product product = productService.findById(productId);
             if (product != null) {
-                // ✅ LẤY THÊM TÊN SẢN PHẨM TỪ FORM
                 product.setProductName(request.getParameter("productName"));
                 product.setDescription(request.getParameter("description"));
                 product.setPawnPrice(parseBigDecimalParameter(request.getParameter("productValue"), "Giá trị định giá không hợp lệ"));
@@ -288,8 +301,6 @@ public class PawnContractController extends HttpServlet {
             } else {
                 throw new IllegalArgumentException("Không tìm thấy sản phẩm để cập nhật.");
             }
-
-            // --- Cập nhật thông tin hợp đồng (giữ nguyên) ---
             int contractId = parseIntParameter(request.getParameter("id"), "Mã hợp đồng không hợp lệ");
             PawnContract contract = new PawnContract();
             contract.setPawnContractId(contractId);
@@ -301,23 +312,20 @@ public class PawnContractController extends HttpServlet {
             contract.setPawnDate(parseLocalDateParameter(request.getParameter("pawnDate"), "Ngày cầm không hợp lệ"));
             contract.setDueDate(parseLocalDateParameter(request.getParameter("dueDate"), "Ngày đến hạn không hợp lệ"));
             String returnDateStr = request.getParameter("returnDate");
-            if(returnDateStr != null && !returnDateStr.isEmpty()){
+            if (returnDateStr != null && !returnDateStr.isEmpty()) {
                 contract.setReturnDate(LocalDate.parse(returnDateStr));
             }
-
             pawnContractService.update(contract);
-
             request.getSession().setAttribute("flashSuccess", "Cập nhật hợp đồng thành công!");
             response.sendRedirect(request.getContextPath() + "/pawn-contracts");
-
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Lỗi khi cập nhật: " + e.getMessage());
             showEditForm(request, response);
         }
     }
-    private void deletePawnContract(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+
+    private void deletePawnContract(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             pawnContractService.delete(id);
@@ -328,16 +336,13 @@ public class PawnContractController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/pawn-contracts");
     }
 
-    private void confirmLiquidation(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    private void confirmLiquidation(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             int contractId = Integer.parseInt(request.getParameter("id"));
             PawnContractDto contract = pawnContractService.findById(contractId);
-
             if (contract == null) {
                 throw new IllegalArgumentException("Hợp đồng không tồn tại");
             }
-
             if ("CO_THE_THANH_LY".equals(contract.getStatus())) {
                 if (productService.updateStatusToLiquidated(contract.getProductId())) {
                     request.getSession().setAttribute("flashSuccess", "✅ Sản phẩm đã được chuyển sang trạng thái Thanh lý!");
@@ -355,8 +360,7 @@ public class PawnContractController extends HttpServlet {
         }
     }
 
-    private void showDetailPawnContract(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void showDetailPawnContract(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             PawnContractDto contract = pawnContractService.getDetail(id);
@@ -395,5 +399,4 @@ public class PawnContractController extends HttpServlet {
             throw new IllegalArgumentException(errorMessage);
         }
     }
-
 }
