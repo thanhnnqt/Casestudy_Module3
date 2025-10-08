@@ -16,8 +16,46 @@
     .badge-liquidatable { background: linear-gradient(90deg, #FFD700, #FFA500); color: black; }
     .badge-liquidating { background: linear-gradient(90deg, #ff6a00, #ee0979); color:white; }
   </style>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    footer {
+      background-color: #212529;
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 40px;
+    }
+
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2000;
+    }
+  </style>
 </head>
 <body class="container mt-5">
+<!-- 🔹 HEADER -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/index.jsp">💼 Cầm Đồ Nhanh</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a></li>
+        <li class="nav-item"><a class="nav-link" href="/liquidation-contract">Hợp đồng</a></li>
+        <%--                <li class="nav-item"><a class="nav-link" href="/product">Sản phẩm</a></li>--%>
+        <%--                <li class="nav-item"><a class="nav-link" href="/customer">Khách hàng</a></li>--%>
+        <li class="nav-item"><a class="nav-link" href="/logout">Đăng xuất</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 <%
   String success = (String) session.getAttribute("flashSuccess");
@@ -28,7 +66,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h2 class="mb-0">📄 Danh sách hợp đồng cầm đồ</h2>
-  <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>
+<%--  <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>--%>
 </div>
 
 <% if (success != null) { %>
@@ -190,6 +228,45 @@
     });
   }
 </script>
+<footer>
+  © 2025 Cầm Đồ Nhanh | Thiết kế bởi Nhóm C0625G1
+</footer>
 
+<script>
+  $(document).ready(function () {
+    $('#tableProduct').DataTable({
+      "dom": 'lrtip',
+      "lengthChange": false,
+      "pageLength": 5,
+      "language": {
+        "decimal": "",
+        "emptyTable": "Không có dữ liệu trong bảng",
+        "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+        "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+        "infoFiltered": "(lọc từ tổng số _MAX_ mục)",
+        "lengthMenu": "Hiển thị _MENU_ mục",
+        "loadingRecords": "Đang tải...",
+        "processing": "Đang xử lý...",
+        "search": "Tìm kiếm:",
+        "zeroRecords": "Không tìm thấy kết quả phù hợp",
+        "paginate": {
+          "first": "Đầu",
+          "last": "Cuối",
+          "next": "›",
+          "previous": "‹"
+        },
+        "aria": {
+          "sortAscending": ": sắp xếp tăng dần",
+          "sortDescending": ": sắp xếp giảm dần"
+        }
+      }
+    });
+
+    // ✅ Tự động ẩn toast sau 3 giây
+    setTimeout(() => {
+      $('.toast').fadeOut('slow');
+    }, 3000);
+  });
+</script>
 </body>
 </html>
