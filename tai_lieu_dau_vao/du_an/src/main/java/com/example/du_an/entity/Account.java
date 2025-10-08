@@ -46,7 +46,7 @@ public class Account {
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
-    public Role getRole() { return role; }
+    public String getRole() { return String.valueOf(role); }
     public void setRole(Role role) { this.role = role; }
 
 }

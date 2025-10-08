@@ -164,3 +164,12 @@
 
 </body>
 </html>
+
+    <c:import url="/views/layout/library.jsp"/>
+        <%--  QUẢN LÝ NHÂN VIÊN --%>
+        <a href="${pageContext.request.contextPath}/employees" class="btn btn-primary me-2">
+            👨‍💼 Quản lý Nhân viên
+        </a>
+        <a href="${pageContext.request.contextPath}/customer?action=list" class="btn btn-primary me-2">
+            👨‍💼 Quản lý khách hàng
+        </a>
