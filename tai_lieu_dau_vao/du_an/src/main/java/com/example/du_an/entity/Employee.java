@@ -13,6 +13,9 @@ public class Employee {
     private String email;
     private String citizenNumber;
 
+    public Employee() {
+    }
+
     public Employee(int accountId, String fullName, LocalDate dob, String phoneNumber,
                     BigDecimal salary, String email, String citizenNumber) {
         this.accountId = accountId;
