@@ -36,6 +36,7 @@ public class Product {
     private String description;
     private BigDecimal pawnPrice;
     private Status status;
+    private String imageUrl;
     public Product() {
     }
 
@@ -92,4 +93,21 @@ public class Product {
     public String getStatusLabel() {
         return (status != null) ? status.getLabel() : "Không xác định";
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    public Product(int productId, String productName, String description, BigDecimal pawnPrice, Status status, String imageUrl) {
+        this.productId = productId;
+        this.productName = productName;
+        this.description = description;
+        this.pawnPrice = pawnPrice;
+        this.status = status;
+        this.imageUrl = imageUrl;
+    }
+
 }

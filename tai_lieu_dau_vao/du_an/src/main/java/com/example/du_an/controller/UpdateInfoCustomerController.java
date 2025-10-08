@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 
 @WebServlet(name = "UpdateInfoCustomerController", value = "/update")
 public class UpdateInfoCustomerController extends HttpServlet {
@@ -33,6 +34,7 @@ public class UpdateInfoCustomerController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         int accountId = Integer.parseInt(req.getParameter("accountId"));
         int customerId = Integer.parseInt(req.getParameter("customerId"));
         String fullName = req.getParameter("fullName");
@@ -45,10 +47,27 @@ public class UpdateInfoCustomerController extends HttpServlet {
         String password = req.getParameter("password");
         String username = req.getParameter("username");
         Account.Role role = Account.Role.valueOf(req.getParameter("role"));
+        LocalDate currentDate = LocalDate.now();
+        int years = Period.between(dob, currentDate).getYears();
+
+        req.setAttribute("customer", customer);
         Account account = new Account(accountId, username, password, role);
+        req.setAttribute("account", account);
+
+        if (years < 18) {
+            req.setAttribute("errorMessageAge", "Ngày sinh phải đủ 18 tuổi");
+            req.getRequestDispatcher("views/user/update.jsp").forward(req, resp);
+            return;
+        } else if(password.length() < 6) {
+            req.setAttribute("errorMessage", "Mật khẩu phải đủ 6 ký tự");
+            req.getRequestDispatcher("views/user/update.jsp").forward(req, resp);
+            return;
+        }
+
         boolean updateCustomer = customerService.update(customer);
         boolean updateAccount = accountService.update(account);
         HttpSession session = req.getSession();
+
         if (updateCustomer && updateAccount) {
             session.setAttribute("toastMessage", "Cập nhật thông tin thành công!");
             session.setAttribute("toastType", "success");
@@ -61,6 +80,9 @@ public class UpdateInfoCustomerController extends HttpServlet {
             resp.sendRedirect("index.jsp");
         } catch (Exception e) {
             e.printStackTrace();
+
         }
+
+
     }
 }

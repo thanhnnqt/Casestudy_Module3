@@ -140,5 +140,32 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/bootstrap520/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<a href="#" id="downloadPdf" class="back-button">⬇️ Tải file PDF</a>
+
+<script>
+    document.getElementById("downloadPdf").addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const element = document.querySelector(".contract-container");
+        const opt = {
+            margin: 0.5,
+            filename: 'hop_dong_cam_do_${contract.pawnContractId}.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true, // nếu có ảnh từ ImgBB
+                scrollY: 0,
+                windowWidth: document.body.scrollWidth,
+                windowHeight: element.scrollHeight
+            },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // ✅ chia trang thông minh
+        };
+        html2pdf().set(opt).from(element).save();
+    });
+</script>
+
 </body>
 </html>
