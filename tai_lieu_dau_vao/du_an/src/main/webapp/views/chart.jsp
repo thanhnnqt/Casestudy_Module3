@@ -5,294 +5,215 @@
     <title>Biểu đồ Lãi suất theo tháng</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <c:import url="/views/layout/library.jsp"/>
     <style>
-        /* ==== Toàn trang ==== */
-        body {
+        .page-header {
+            background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+        }
+
+        .btn-back {
+            background-color: #ffc107;
+            border: none;
+            color: #212529;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #ffca2c;
+            color: black;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .chart-page {
             background: linear-gradient(135deg, #eef2f7, #dce7f3);
             min-height: 100vh;
             font-family: "Poppins", sans-serif;
-            color: #212529;
-            overflow-x: hidden;
         }
-
-        .d-flex {
+        .chart-container {
+            display: flex;
+            width: 100%;
             height: 100vh;
         }
-
-        /* ==== Vùng chứa nội dung bên phải ==== */
-        .col-md-10 {
+        .chart-content {
+            flex: 1;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
         h6 {
+            color: #0d6efd;
             font-weight: 600;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0.5px 1px rgba(0,0,0,0.2);
+            text-transform: uppercase;
             margin-bottom: 1rem;
         }
-
-        /* ==== Thẻ chứa biểu đồ ==== */
         #chartCard {
-            background: #ffffff;
-            border-radius: 1.2rem;
-            padding: 1.5rem;
-            width: 100%;
-            max-width: 100%;
-            height: 82vh; /* chiếm gần hết chiều cao màn hình */
-            box-shadow: 0 8px 20px rgba(13,110,253,0.1);
-            border: 1px solid rgba(13,110,253,0.15);
-            transition: all 0.35s ease;
-            animation: fadeInUp 0.8s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #chartCard:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 28px rgba(13,110,253,0.18);
-            border-color: rgba(13,110,253,0.35);
-        }
-
-        /* ==== Canvas ==== */
-        #myChart {
-            width: 95% !important;    /* full gần hết chiều ngang màn hình */
-            height: 100% !important;  /* tự co cho vừa khung */
-            background: linear-gradient(180deg, #f9fbff, #eef5ff);
+            background: #fff;
             border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(13,110,253,0.2);
             padding: 1rem;
-            border: 1px solid rgba(13,110,253,0.1);
-            box-shadow: inset 0 0 8px rgba(13,110,253,0.08);
-            transition: all 0.4s ease;
+            height: 82vh;
+            width: 100%;
+            position: relative;
         }
-
-        #chartCard:hover #myChart {
-            box-shadow: inset 0 0 12px rgba(13,110,253,0.2);
-            background: linear-gradient(180deg, #f0f6ff, #e3edff);
+        #myChart {
+            width: 100% !important;
+            height: 100% !important;
         }
-
-        /* ==== Scrollbar ==== */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .chart-control {
+            position: absolute;
+            top: 10px;
+            right: 15px;
         }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #0d6efd, #74b9ff);
-            border-radius: 6px;
+        .chart-select {
+            border: 1px solid #0d6efd;
+            border-radius: 8px;
+            padding: 5px 10px;
+            color: #0d6efd;
+            font-weight: 600;
+            cursor: pointer;
+            background: #fff;
         }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .chart-select:hover {
+            background-color: #0d6efd;
+            color: white;
         }
-
-        /* ==== Animation ==== */
-        @keyframes fadeInUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        /* ==== Tiêu đề ==== */
-        .text-primary {
-            color: #0d6efd !important;
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
+        @media (max-width: 768px) {
+            .chart-container { flex-direction: column; }
         }
     </style>
-
 </head>
-<body>
 
-<div class="d-flex w-100">
+<body class="chart-page">
+<div class="chart-container">
     <c:import url="/views/layout/sidebar.jsp"/>
-    <div class="col-md-10 p-2">
-        <h6 class="mb-2 text-center text-primary mt-0">Lãi suất theo tháng</h6>
+    <div class="chart-content col-md-10">
+        <div class="page-header d-flex justify-content-between align-items-center w-100">
+            <h3 class="mb-0">Doanh thu theo tháng</h3>
+            <a href="/views/admin/home.jsp" type="button" class="btn btn-back">
+                ⬅ Quay lại
+            </a>
+        </div>
         <div id="chartCard">
-            <canvas id="myChart" height="150"></canvas>
+            <canvas id="myChart"></canvas>
         </div>
     </div>
 </div>
 
 <script>
-    const labels = ${month};
+    // Chuyển month từ backend thành "Tháng X"
+    const labels = ${month}.map(m => 'Tháng ' + parseInt(m, 10));
     const dataValues = ${interestRate};
+    const ctx = document.getElementById('myChart').getContext('2d');
 
-    const chartContainer = document.getElementById('chartCard');
-    const canvas = document.getElementById('myChart');
-    let ctx = canvas.getContext('2d');
+    const gradient = ctx.createLinearGradient(0,0,0,400);
+    gradient.addColorStop(0,'rgba(13,110,253,0.85)');
+    gradient.addColorStop(0.5,'rgba(0,123,255,0.6)');
+    gradient.addColorStop(1,'rgba(0,123,255,0.2)');
 
-    function createGradient(ctx) {
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(13,110,253,0.9)');
-        gradient.addColorStop(0.5, 'rgba(13,110,253,0.6)');
-        gradient.addColorStop(1, 'rgba(13,110,253,0.15)');
-        return gradient;
-    }
+    const multiColors = [
+        '#0d6efd','#6610f2','#6f42c1','#d63384','#fd7e14','#198754','#20c997','#0dcaf0','#ffc107','#fd7e14'
+    ];
 
     let chartType = 'bar';
-    let chart;
 
-    const baseConfig = {
-        data: {
-            labels,
-            datasets: [{
-                label: 'Lợi nhuận (VNĐ)',
+    function createDataset(type) {
+        if(type==='bar'||type==='line') {
+            return {
+                label: 'Doanh thu (VNĐ)',
                 data: dataValues,
-                backgroundColor: createGradient(ctx),         // màu bình thường
+                backgroundColor: gradient,
                 borderColor: '#0d6efd',
                 borderWidth: 2,
-                borderRadius: 12,
-                tension: 0.4,
-                fill: true,
-                hoverBackgroundColor: 'rgba(13,110,253,0.8)', // màu nổi bật khi hover
-                hoverBorderColor: '#ffc107',                   // viền khi hover
-                hoverBorderWidth: 3,
-                pointBackgroundColor: '#0d6efd',
-                pointHoverRadius: 8,
-                pointHoverBackgroundColor: '#ffc107'
-            }]
-        },
+                borderRadius: 10,
+                hoverBackgroundColor: '#ffc107'
+            };
+        } else {
+            return {
+                label: 'Doanh thu (VNĐ)',
+                data: dataValues,
+                backgroundColor: multiColors,
+                borderColor: '#fff',
+                borderWidth: 2
+            };
+        }
+    }
+
+    // Tạo chart ban đầu
+    let chart = new Chart(ctx, {
+        type: chartType,
+        data: { labels, datasets: [createDataset(chartType)] },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: {
-                duration: 1000,
-                easing: 'easeOutQuart'
-            },
             plugins: {
-                legend: {
-                    display: true,
-                    labels: { color: '#0d6efd', font: { size: 13, weight: 'bold' } }
-                },
                 tooltip: {
-                    backgroundColor: 'rgba(13,110,253,0.9)',
-                    titleFont: { weight: 'bold', size: 13 },
-                    bodyFont: { size: 12 },
-                    cornerRadius: 10,
+                    backgroundColor: '#0d6efd',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderRadius: 8,
+                    padding: 10,
                     callbacks: {
-                        title: ctx => 'Tháng: ' + ctx[0].label,
-                        label: ctx => 'Lãi suất: ' + ctx.formattedValue + ' đ'
+                        label: context => 'Doanh thu: ' + context.formattedValue + ' VNĐ'
                     }
-                }
-            },
-            hover: {
-                mode: 'nearest',
-                intersect: true
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(13,110,253,0.05)' },
-                    ticks: { color: '#0d6efd', font: { size: 11, weight: 'bold' } }
                 },
-                x: {
-                    grid: { color: 'rgba(13,110,253,0.05)' },
-                    ticks: { color: '#0d6efd', font: { size: 11, weight: 'bold' } }
-                }
+                legend: { labels: { color: '#0d6efd', font: { weight: 'bold', size: 13 } } }
+            },
+            scales: chartType==='bar'||chartType==='line'? {
+                y: { ticks: { color: '#0d6efd', font: { weight: 'bold' } } },
+                x: { ticks: { color: '#0d6efd', font: { weight: 'bold' } } }
+            } : {}
+        }
+    });
+
+    // Dropdown chọn type biểu đồ
+    const control = document.createElement("div");
+    control.className = "chart-control";
+    control.innerHTML = `
+        <select class="chart-select" id="chartTypeSelect">
+            <option value="bar">📊 Cột</option>
+            <option value="line">📈 Đường</option>
+            <option value="pie">🥧 Tròn</option>
+            <option value="doughnut">🍩 Vòng</option>
+            <option value="radar">📡 Radar</option>
+            <option value="polarArea">🔵 Polar</option>
+        </select>`;
+    document.getElementById("chartCard").appendChild(control);
+
+    document.getElementById("chartTypeSelect").addEventListener("change", e=>{
+        chart.destroy();
+        chartType = e.target.value;
+        chart = new Chart(ctx,{
+            type: chartType,
+            data: { labels, datasets: [createDataset(chartType)] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        backgroundColor: '#0d6efd',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderRadius: 8,
+                        padding: 10,
+                        callbacks: { label: context => 'Doanh thu: ' + context.formattedValue + ' VNĐ' }
+                    },
+                    legend: { labels: { color: '#0d6efd', font: { weight: 'bold', size: 13 } } }
+                },
+                scales: chartType==='bar'||chartType==='line'? {
+                    y: { ticks: { color: '#0d6efd', font: { weight: 'bold' } } },
+                    x: { ticks: { color: '#0d6efd', font: { weight: 'bold' } } }
+                } : {}
             }
-        }
-    };
-
-
-    // Tạo chart ban đầu
-    chart = new Chart(ctx, { ...baseConfig, type: chartType });
-
-    // === Dropdown chọn loại biểu đồ ===
-    const controlWrapper = document.createElement('div');
-    controlWrapper.className = "chart-control";
-    controlWrapper.innerHTML = `
-        <select id="chartSelect" class="chart-select">
-            <option value="bar" selected>📊 Biểu đồ cột</option>
-            <option value="line">📈 Biểu đồ đường</option>
-            <option value="pie">🥧 Biểu đồ tròn</option>
-            <option value="doughnut">🍩 Biểu đồ vòng</option>
-        </select>
-    `;
-    chartContainer.appendChild(controlWrapper);
-
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .chart-control {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            z-index: 10;
-            background: rgba(255,255,255,0.95);
-            border-radius: 12px;
-            padding: 8px 12px;
-            box-shadow: 0 4px 12px rgba(13,110,253,0.15);
-        }
-        .chart-select {
-            border: 2px solid #0d6efd;
-            background: white;
-            color: #0d6efd;
-            font-weight: 600;
-            border-radius: 10px;
-            padding: 8px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(13,110,253,0.15);
-            transition: all 0.25s ease;
-        }
-        .chart-select:hover {
-            background: #0d6efd;
-            color: white;
-            transform: translateY(-1px);
-        }
-        .chart-select option {
-            color: #0d6efd;
-            font-weight: 500;
-            font-size: 14px;
-            background: white;
-        }
-        .chart-select:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(13,110,253,0.3);
-        }
-        #chartCard {
-            position: relative;
-        }
-        @keyframes fadeInChart {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        canvas.fade-in {
-            animation: fadeInChart 0.6s ease;
-        }
-    `;
-    document.head.appendChild(style);
-
-    // === Xử lý đổi loại biểu đồ ===
-    document.getElementById('chartSelect').addEventListener('change', (e) => {
-        const newType = e.target.value;
-        if (chart) chart.destroy();
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        canvas.classList.remove('fade-in');
-        void canvas.offsetWidth; // reset animation
-        canvas.classList.add('fade-in');
-
-        chartType = newType;
-        baseConfig.data.datasets[0].backgroundColor = createGradient(ctx);
-        chart = new Chart(ctx, { ...baseConfig, type: chartType });
+        });
     });
 </script>
-
-
-
-
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
