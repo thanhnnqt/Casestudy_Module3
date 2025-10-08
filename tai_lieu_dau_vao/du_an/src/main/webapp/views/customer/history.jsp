@@ -22,7 +22,8 @@
 <%-- Thêm Navbar cho đồng bộ --%>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="/customer-home">Tiệm Cầm Đồ</a>
+        <%-- THAY ĐỔI TẠI ĐÂY --%>
+        <a class="navbar-brand fw-bold text-danger" href="${pageContext.request.contextPath}/index.jsp">CẦM ĐỒ NHANH</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">

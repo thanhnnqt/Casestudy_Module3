@@ -5,12 +5,21 @@
 <head>
     <title>Sản phẩm đang thanh lý</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <%-- Thêm thư viện icon Font Awesome --%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
+        /* === CSS ĐỂ FOOTER LUÔN NẰM DƯỚI CÙNG === */
+        html, body {
+            height: 100%;
         }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1 0 auto;
+        }
+        /* ========================================= */
+
         .product-card {
             transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
         }
@@ -22,10 +31,10 @@
 </head>
 <body>
 
-<%-- Navbar đồng bộ --%>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="/customer-home">Tiệm Cầm Đồ</a>
+        <%-- THAY ĐỔI TẠI ĐÂY --%>
+        <a class="navbar-brand fw-bold text-danger" href="${pageContext.request.contextPath}/index.jsp">CẦM ĐỒ NHANH</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <c:if test="${not empty sessionScope.account}">
@@ -48,14 +57,15 @@
     </div>
 </nav>
 
-<div class="container my-5">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">Sản Phẩm Đang Được Thanh Lý</h1>
-        <p class="lead text-muted">Cơ hội sở hữu những sản phẩm chất lượng với giá tốt nhất!</p>
+<div class="container my-5 main-content">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="text-center flex-grow-1">
+            <h1 class="display-5 fw-bold">Sản Phẩm Đang Được Thanh Lý</h1>
+            <p class="lead text-muted">Cơ hội sở hữu những sản phẩm chất lượng với giá tốt nhất!</p>
+        </div>
     </div>
 
     <c:choose>
-        <%-- Khi có sản phẩm để hiển thị --%>
         <c:when test="${not empty productList}">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 <c:forEach var="product" items="${productList}">
@@ -74,12 +84,6 @@
                                         <fmt:formatNumber value="${product.liquidationPrice}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
                                     </span>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-calendar-alt me-2 text-primary"></i>Ngày thanh lý</span>
-                                    <span class="text-muted">
-                                        <fmt:parseDate value="${product.liquidationDate}" pattern="yyyy-MM-dd" var="parsedDate" /><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
-                                    </span>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -87,7 +91,6 @@
             </div>
         </c:when>
 
-        <%-- Khi không có sản phẩm nào --%>
         <c:otherwise>
             <div class="text-center p-5 text-muted border rounded bg-light">
                 <i class="fas fa-box-open fa-3x mb-3"></i>
@@ -99,7 +102,7 @@
 </div>
 
 <%-- Footer --%>
-<footer class="bg-dark text-white text-center py-3 mt-5">
+<footer class="bg-dark text-white text-center py-3">
     <div class="container">
         <p class="mb-0">&copy; 2025 Tiệm Cầm Đồ Nhanh. All rights reserved.</p>
     </div>
