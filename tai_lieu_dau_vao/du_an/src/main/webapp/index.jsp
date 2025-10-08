@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cầm Đồ Nhanh | Giải Pháp Tài Chính Tin Cậy</title>
+    <c:import url="views/layout/library.jsp"/>
 
 <%--    <link href="<%= request.getContextPath() %>/bootstrap520/css/bootstrap.min.css" rel="stylesheet">--%>
 <%--    <link rel="stylesheet" href="<%= request.getContextPath() %>/fontawesome-free-7.1.0-web/css/all.min.css" />--%>
@@ -53,7 +54,25 @@
     </style>
 </head>
 <body class="antialiased">
+<c:if test="${not empty sessionScope.toastMessage}">
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div id="liveToast"
+             class="toast text-bg-${sessionScope.toastType != null ? sessionScope.toastType : 'primary'} border-0"
+             role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                        ${sessionScope.toastMessage}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast" aria-label="Đóng"></button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Xóa session sau khi hiển thị -->
+    <c:remove var="toastMessage" scope="session"/>
+    <c:remove var="toastType" scope="session"/>
+</c:if>
 <!-- Header / Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
@@ -323,5 +342,14 @@
 
 <!-- Bootstrap JS -->
 <%--<script src="<%= request.getContextPath() %>/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>--%>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toastEl = document.getElementById('liveToast');
+        if (toastEl) {
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+        }
+    });
+</script>
 </body>
 </html>
