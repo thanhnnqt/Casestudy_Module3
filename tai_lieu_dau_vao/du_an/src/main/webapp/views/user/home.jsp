@@ -22,7 +22,7 @@
 
 
     <a class="btn btn-primary me-2" href="/update?id=${account.id}">
-        Chỉnh sửa thông tin
+        Chỉnh sửa thông tin cá nhân
     </a>
 
 
