@@ -37,8 +37,8 @@ public class PawnContractService implements IPawnContractService{
     }
 
     @Override
-    public List<PawnContractDto> search(String customerName, String employeeName, String productName) {
-        return pawnContractRepository.search(customerName, employeeName, productName);
+    public List<PawnContractDto> search(String customerName, String employeeName, String productName,String status) {
+        return pawnContractRepository.search(customerName, employeeName, productName, status);
     }
 
     @Override
@@ -55,4 +55,10 @@ public class PawnContractService implements IPawnContractService{
     public int countPawnContract() {
         return pawnContractRepository.countPawnContract();
     }
+
+    @Override
+    public PawnContractDto getDetail(int pawnContractId) {
+        return pawnContractRepository.getDetail(pawnContractId);
+    }
+
 }
