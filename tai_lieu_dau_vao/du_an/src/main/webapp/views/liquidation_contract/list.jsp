@@ -72,9 +72,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/index.jsp">Trang chủ</a></li>
                 <li class="nav-item"><a class="nav-link" href="/liquidation-contract">Hợp đồng</a></li>
-                <li class="nav-item"><a class="nav-link" href="/product">Sản phẩm</a></li>
-                <li class="nav-item"><a class="nav-link" href="/customer">Khách hàng</a></li>
+<%--                <li class="nav-item"><a class="nav-link" href="/product">Sản phẩm</a></li>--%>
+<%--                <li class="nav-item"><a class="nav-link" href="/customer">Khách hàng</a></li>--%>
                 <li class="nav-item"><a class="nav-link" href="/logout">Đăng xuất</a></li>
             </ul>
         </div>
@@ -100,7 +101,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">📄 Danh sách hợp đồng thanh lý</h2>
-        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>
+<%--        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>--%>
     </div>
 
     <!-- 🔍 Form tìm kiếm -->
@@ -162,7 +163,7 @@
 
 <!-- 🔹 FOOTER -->
 <footer>
-    © 2025 Cầm Đồ Nhanh | Thiết kế bởi Nhóm Dự Án Java Web
+    © 2025 Cầm Đồ Nhanh | Thiết kế bởi Nhóm C0625G1
 </footer>
 
 <script src="jquery/jquery-3.5.1.min.js"></script>

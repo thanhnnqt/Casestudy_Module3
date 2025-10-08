@@ -11,6 +11,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         .table-hover tbody tr:hover {
             background-color: #f1f1f1;
             cursor: pointer;
@@ -38,7 +39,7 @@
         </div>
     </div>
 </nav>
-<a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">🏠 Quay về Home</a>
+
 </div>
 <div class="container my-5">
     <div class="text-center mb-5">
@@ -69,9 +70,15 @@
                             <c:forEach var="item" items="${history.pawnedItems}">
                                 <tr>
                                     <td>${item.productName}</td>
-                                    <td class="text-center"><fmt:parseDate value="${item.pawnDate}" pattern="yyyy-MM-dd" var="pDate" /><fmt:formatDate value="${pDate}" pattern="dd/MM/yyyy" /></td>
-                                    <td class="text-end fw-bold"><fmt:formatNumber value="${item.pawnPrice}" type="currency" currencySymbol="₫" maxFractionDigits="0"/></td>
-                                    <td class="text-center"><fmt:parseDate value="${item.dueDate}" pattern="yyyy-MM-dd" var="dDate" /><fmt:formatDate value="${dDate}" pattern="dd/MM/yyyy" /></td>
+                                    <td class="text-center"><fmt:parseDate value="${item.pawnDate}" pattern="yyyy-MM-dd"
+                                                                           var="pDate"/><fmt:formatDate value="${pDate}"
+                                                                                                        pattern="dd/MM/yyyy"/></td>
+                                    <td class="text-end fw-bold"><fmt:formatNumber value="${item.pawnPrice}"
+                                                                                   type="currency" currencySymbol="₫"
+                                                                                   maxFractionDigits="0"/></td>
+                                    <td class="text-center"><fmt:parseDate value="${item.dueDate}" pattern="yyyy-MM-dd"
+                                                                           var="dDate"/><fmt:formatDate value="${dDate}"
+                                                                                                        pattern="dd/MM/yyyy"/></td>
                                     <td class="text-center"><span class="badge bg-secondary">${item.status}</span></td>
                                 </tr>
                             </c:forEach>
@@ -107,8 +114,13 @@
                             <c:forEach var="item" items="${history.purchasedItems}">
                                 <tr>
                                     <td>${item.productName}</td>
-                                    <td class="text-center"><fmt:parseDate value="${item.purchaseDate}" pattern="yyyy-MM-dd" var="purDate" /><fmt:formatDate value="${purDate}" pattern="dd/MM/yyyy" /></td>
-                                    <td class="text-end fw-bold"><fmt:formatNumber value="${item.purchasePrice}" type="currency" currencySymbol="₫" maxFractionDigits="0"/></td>
+                                    <td class="text-center"><fmt:parseDate value="${item.purchaseDate}"
+                                                                           pattern="yyyy-MM-dd"
+                                                                           var="purDate"/><fmt:formatDate
+                                            value="${purDate}" pattern="dd/MM/yyyy"/></td>
+                                    <td class="text-end fw-bold"><fmt:formatNumber value="${item.purchasePrice}"
+                                                                                   type="currency" currencySymbol="₫"
+                                                                                   maxFractionDigits="0"/></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

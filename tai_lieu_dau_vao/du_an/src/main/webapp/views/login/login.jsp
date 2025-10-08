@@ -23,7 +23,7 @@
 
     /* HEADER */
     header {
-      background: linear-gradient(90deg, #0066cc, #0099ff);
+      background: linear-gradient(90deg, #dc3545, #dc3545);
       color: white;
       padding: 16px 40px;
       text-align: center;
@@ -36,7 +36,7 @@
     /* Nút quay lại trang chủ */
     .home-btn {
       display: inline-block;
-      background: #007bff;
+      background: #dc3545;
       color: #fff;
       padding: 10px 20px;
       border-radius: 50px;
@@ -119,7 +119,7 @@
     }
 
     button:hover {
-      background: #0056b3;
+      background: #198754;
     }
 
     .error {
@@ -131,7 +131,7 @@
 
     /* FOOTER */
     footer {
-      background: #002b5c;
+      background: #dc3545;
       color: #fff;
       text-align: center;
       padding: 12px;

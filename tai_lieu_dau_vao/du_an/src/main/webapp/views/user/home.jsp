@@ -19,11 +19,12 @@
 
         /* HEADER */
         header {
-            background: linear-gradient(135deg, #198754, #20c997);
+            background: linear-gradient(135deg, #c62828, #c62828);
             color: white;
             padding: 20px 0;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
         }
+
         header h1 {
             font-size: 1.8rem;
             font-weight: 600;
@@ -34,10 +35,12 @@
             text-align: center;
             margin-top: 20px;
         }
+
         .user-info h3 {
-            color: #198754;
+            color: #c62828;
             font-weight: 700;
         }
+
         .user-info p {
             color: #6c757d;
             font-size: 1rem;
@@ -60,29 +63,34 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .menu-card {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             padding: 25px 20px;
             text-align: center;
             transition: all 0.3s ease;
             text-decoration: none;
             color: inherit;
         }
+
         .menu-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
+
         .menu-card i {
             font-size: 2.5rem;
             color: #198754;
             margin-bottom: 15px;
         }
+
         .menu-card h5 {
             font-weight: 600;
             color: #343a40;
         }
+
         .menu-card p {
             font-size: 0.95rem;
             color: #6c757d;
@@ -101,10 +109,12 @@
         .action-buttons {
             margin-top: 40px;
         }
+
         .btn {
             border-radius: 8px;
             transition: all 0.3s ease;
         }
+
         .btn:hover {
             transform: translateY(-2px);
         }
@@ -142,12 +152,6 @@
                 <i class="bi bi-journal-text"></i>
                 <h5>Chỉnh sửa thông tin</h5>
                 <p>Xem, chỉnh sửa thông tin cá nhân của khách hàng</p>
-            </a>
-
-            <a href="${pageContext.request.contextPath}/index.jsp" class="menu-card">
-                <i class="bi bi-people"></i>
-                <h5>Quay lại trang chủ</h5>
-                <p>Quay lại trang chủ hệ thống</p>
             </a>
 
             <a href="${pageContext.request.contextPath}/logout" class="menu-card">
