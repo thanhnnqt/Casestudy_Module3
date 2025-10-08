@@ -54,6 +54,31 @@
 </head>
 <body class="antialiased">
 
+<c:if test="${not empty sessionScope.toastMessage}">
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast align-items-center text-white bg-${sessionScope.toastType} border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                        ${sessionScope.toastMessage}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Đóng"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toastEl = document.querySelector(".toast");
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+        });
+    </script>
+
+    <!-- Xóa message sau khi hiển thị bằng JSTL -->
+    <c:remove var="toastMessage" scope="session" />
+    <c:remove var="toastType" scope="session" />
+</c:if>
+
 <!-- ✅ HEADER (thêm trực tiếp vào file) -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
   <div class="container">
