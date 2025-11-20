@@ -348,6 +348,93 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Chatbox -->
+  <div id="chat-widget">
+    <div id="chat-header">💬 Chat với AI</div>
+    <div id="chat-body"></div>
+    <div id="chat-input">
+      <input type="text" id="userMessage" placeholder="Nhập tin nhắn..." />
+      <button id="sendBtn">Gửi</button>
+    </div>
+  </div>
 
+  <style>
+    #chat-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-family: Arial;
+      display: flex;
+      flex-direction: column;
+    }
+    #chat-header {
+      background: #0078ff;
+      color: white;
+      padding: 10px;
+      border-radius: 10px 10px 0 0;
+      cursor: pointer;
+    }
+    #chat-body {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    #chat-input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+    }
+    #chat-input button {
+      background: #0078ff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .message.user { text-align: right; color: blue; margin: 5px 0; }
+    .message.bot { text-align: left; color: green; margin: 5px 0; }
+  </style>
+  <script>
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+
+    function appendMessage(sender, text) {
+      const body = document.getElementById("chat-body");
+      const div = document.createElement("div");
+      div.classList.add("message", sender);
+      div.textContent = text;
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("userMessage");
+      const message = input.value.trim();
+      if (!message) return;
+      appendMessage("user", message);
+      input.value = "";
+
+      fetch("/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      })
+              .then(res => res.json())
+              .then(data => {
+                appendMessage("bot", data.reply);
+              })
+              .catch(err => {
+                appendMessage("bot", "❌ Lỗi khi kết nối chatbot!");
+                console.error(err);
+              });
+    }
+  </script>
 </body>
 </html>

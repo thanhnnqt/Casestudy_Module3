@@ -34,6 +34,11 @@
     </div>
   </div>
 </div>
-
+<h2>Thanh toán qua VNPAY</h2>
+<form action="create_payment" method="get">
+  <label>Số tiền (VND): </label>
+  <input type="number" name="amount" value="10000">
+  <button type="submit">Thanh toán</button>
+</form>
 </body>
 </html>
